@@ -1,6 +1,7 @@
 # SysML-v2-Models
 
-This is the SysMLv2 Model Collection. This repository is dedicated to providing a high-quality collection of SysMLv2 models. Our goal is to create a shared resource of well-structured, reusable SysMLv2 models for systems engineering.
+This is the SysMLv2 Model Collection. This repository is dedicated to providing a high-quality collection of SysMLv2 models. Our goal is to create a shared resource of well-structured, reusable SysMLv2 models for systems engineering. To do that, we carefully curate added models before they are added to the collection.
+
 
 # Purpose
 The purpose of this repository is to gather and curate a set of high-quality SysMLv2 models that can be used across various domains in systems engineering. We aim to build a diverse collection that showcases best practices and real-world use cases of SysMLv2.
