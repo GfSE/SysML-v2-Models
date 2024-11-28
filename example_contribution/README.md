@@ -1,4 +1,10 @@
-# An Example Contribution
+# Fischertechnik
+
+This is a Model of a toy factory made in Fischertechnik.
+Both the Factory itself and the outside entities Customer and Supplier are Modeled.
+
+
+# Example Contribution
 
 If you want to contribute models to the collection, you can do so in an new
 folder like this one. The models should have a ".sysml" extension. If you want
