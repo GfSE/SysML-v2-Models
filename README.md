@@ -70,5 +70,5 @@ models.
 As said: If this License does not suit you, but you still want to publish your
 model it is possible to add a different license for the models of a top-level
 subdirectory. All models in the repository fall under the license of the
-subdirectory their are contained in. 
+subdirectory they are contained in. 
 
