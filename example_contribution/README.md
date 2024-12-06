@@ -1,7 +1,6 @@
-# Fischertechnik
+# Example Models
 
-This is a Model of a toy factory made in Fischertechnik.
-Both the Factory itself and the outside entities Customer and Supplier are Modeled.
+These are simple example models used to illustrate the process of contributing. Please add a markdown file describing your contribution.
 
 
 # Example Contribution
@@ -19,4 +18,4 @@ To contribute
   currently do not impose a specific form or meta-data)
 * If you are uneasey with the standard license of this repo, you may attach your
   own license as `LICENSE.md` in your own(!) directory. 
-* submit a pull request with a small description of your addition.
+* submit a pull request with a description of your addition.
