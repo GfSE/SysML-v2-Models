@@ -25,9 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: |
-          sudo apt-get install openjdk-11-jdk,
-          java -version
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # You can choose your preferred distribution
+          java-version: '11'     # Use the Java version compatible with your JAR
+      - name: MontiCore Sysml
+        run: java -jar ./CI/language-7.6.2-SNAPSHOT-cli.jar -i "example_contribution/Metamodel.sysml" -nc
 
