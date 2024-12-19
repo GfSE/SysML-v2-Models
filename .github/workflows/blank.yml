@@ -30,6 +30,12 @@ jobs:
         with:
           distribution: 'temurin' # You can choose your preferred distribution
           java-version: '11'     # Use the Java version compatible with your JAR
+          
+      - name: check
+        run: ls
+
+
+          
       - name: MontiCore Sysml
         run: java -jar ./CI/language-7.6.2-SNAPSHOT-cli.jar -i "example_contribution/Metamodel.sysml" -nc
 
