@@ -21,6 +21,8 @@ item def OrderConfirmation specializes GeneralOrder {}
 
 item def Shipment {}
 
+item def ShippingConfirmation {}
+
 item def Product {
     attribute productID : String;
 }
@@ -29,16 +31,22 @@ item def Material {
     attribute materialID : String;
 }
 
-item def Intermediate {}
+item def Inventory {}
 
-item def Intermediate0 specializes Intermediate {}
+item def IntermediateProduct {}
 
 part Machine {
     attribute name : String;
     attribute secondsToProcess : int;
 }
 
-// Port defs. Are they really needed? Each port has just one member ...
+port def InventoryPortDef {
+    out item inventory : Inventory;
+}
+
+port def ShippingConfirmationPortDef {
+    out item shippingConfirmation : ShippingConfirmation;
+}
 
 port def ProductOrderPortDef {
     out item productOrder : ProductOrder;
@@ -85,25 +93,49 @@ port def OrderConfirmationPortDef {
 part factoryContext {
     part Manufacturer {
         part Production {
-            part ProducitonControl {
+            part ProductionControl {
                 in port materialIn : ~MaterialPortDef;
                 in port productionOrderIn : ~ProductOrderPortDef;
                 out port material0 : MaterialPortDef;
+                out port productionOrderOut : ProductOrderPortDef;
             }
-
-            part ProductionLine1 {
+            // ProductionOrder->Production Config
+            // Production config from Production Control to each machine, one port each
+            part AngleProductionLine {
                 in port materialIn : ~MaterialPortDef;
                 out port productOut : ProductPortDef;
+                in port productionOrderIn : ~ProductOrderPortDef;
 
-                // TODO: Add Machines!
+                part Cutting {
+                    attribute length : float;
+                }
+
+                part Heating {
+                    attribute temperature : float;
+                    attribute duration : float;
+                }
+
+                part Bending {
+                    attribute angle;
+                }
+
+                part Drilling {
+                    attribute holeLocationsX;
+                    attribute holeLocationsY;
+                }
+
+                part Grinding {
+                    attribute duration : float;
+                    attribute grainSize : int;
+                }
+
+                part Polishing {
+                    attribute grainSize : int;
+                    attribute duration : float;
+                }
             }
 
-            part ProductionLine2 {
-                in port materialIn : ~MaterialPortDef;
-                out port productOut : ProductPortDef;
-
-                // TODO: Add Machines!
-            }
+            connect ProductionControl.productionOrderOut to ProductionLine1.productionOrderIn;
 
             in port productionOrderIn : ~ProductOrderPortDef;
             out port productOut : ProductPortDef;
@@ -115,7 +147,7 @@ part factoryContext {
             in port materialOrderIn : ~MaterialOrderPortDef;
             in port materialIn : ~MaterialPortDef;
 
-            out port purchaseOrderOut : PurchaseOrderPortDef;
+            out port inventory : InventoryPortDef;
             out port materialOut : MaterialPortDef;
         }
 
@@ -125,6 +157,13 @@ part factoryContext {
 
             in port orderConfirmationIn : ~OrderConfirmationPortDef;
             in port inquiryIn : ~InquiryPortDef;
+            in port shippingConfirmationIn : ~ShippingConfirmationPortDef;
+            out port shippingConfirmationOut : ShippingConfirmationPortDef;
+        }
+
+        part Procurement {
+            in port salesOrderIn : ~SalesOrderPortDef;
+            out port purchaseOrderOut : MaterialOrderPortDef;
         }
 
         part ProductionScheduling {
@@ -135,6 +174,8 @@ part factoryContext {
         part Dispatch {
             in port productIn : ~ProductPortDef;
             in port salesOrderIn : ~SalesOrderPortDef;
+
+            out port shippingConfirmationOut : ShippingConfirmationPortDef;
             out port shipmentOut : ShipmentPortDef;
         }
 
@@ -144,7 +185,6 @@ part factoryContext {
         connect ProductionScheduling.productionOrderOut to Production.productionOrderIn;
         connect Production.materialOrderOut to Storage.materialOrderIn;
         connect Production.ProductionLine1 to Dispatch.productIn;
-        connect Production.ProductionLine2 to Dispatch.productIn;
 
         connect Storage.materialOut to Production.materialIn;
     }
@@ -155,6 +195,7 @@ part factoryContext {
 
         in port orderQuotationIn : ~OrderQuotationPortDef;
         in port shipmentIn : ~ShipmentPortDef;
+        in port shippingConfirmationIn : ~ShippingConfirmationPortDef;
     }
 
     part Supplier {
@@ -163,14 +204,15 @@ part factoryContext {
     }
 
     connect Customer.inquiryOut to Manufacturer.Sales.inquiryIn;
+    connect Manufacturer.Sales.shippingConfirmationOut to Customer.shippingConfirmationIn;
 
     connect Manufacturer.Sales.orderQuotationOut to Customer.orderQuotationIn;
     connect Manufacturer.Sales.orderConfirmationIn to Customer.orderConfirmationOut;
 
     connect Customer.shipmentIn to Manufacturer.Dispatch.shipmentOut;
 
-    connect Supplier.purchaseOrderIn to Manufacturer.Storage.purchaseOrderOut;
+    connect Supplier.purchaseOrderIn to Manufacturer.Procurement.purchaseOrderOut;
     connect Supplier.materialOut to Manufacturer.Storage.materialIn;
 
-    connect Manufacturer.Storage.purchaseOrderOut to Supplier.purchaseOrderIn;
+    connect Manufacturer.Procurement.purchaseOrderOut to Supplier.purchaseOrderIn;
 }
