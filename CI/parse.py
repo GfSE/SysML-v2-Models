@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from pathlib import Path
 from tqdm import tqdm
+import json
 
 exclude_list = ['.git','CI','.github','.idea']
 
@@ -43,12 +44,12 @@ for i,model_path in tqdm(enumerate(model_paths),total=len(model_paths),desc="mon
        model_paths[i]['parsable'] = True
     else:
        model_paths[i]['parsable'] = False
-       model_paths[i]['stdout'] = out_monticore.stdout.decode('utf-8')
-       model_paths[i]['stderr'] = out_monticore.stderr.decode('utf-8')
+       model_paths[i]['stdout'] = out_monticore.stdout.decode()
+       model_paths[i]['stderr'] = out_monticore.stderr.decode()
             
            
-        
-print(model_paths)
+with open("CI/parsable.json",'w') as f:
+    json.dump(model_paths,f,indent=4)
             
 
             

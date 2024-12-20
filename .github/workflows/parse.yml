@@ -42,4 +42,9 @@ jobs:
          
       - name: MontiCore Sysml
         run: python CI/parse.py
-
+        
+      - name: Upload parsable.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: parsable-json
+          path: CI/parsable.json
