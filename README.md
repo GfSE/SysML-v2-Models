@@ -1,6 +1,6 @@
 # SysML-v2-Models
 
-This is an open and extensible collection of SysMLv2 model. This repository is
+This is an open and extensible collection of SysMLv2 models. This repository is
 dedicated to providing a high-quality collection of SysMLv2 models. Our goal is
 to create a shared resource of well-structured, reusable SysMLv2 models for
 systems engineering. To do that, we carefully curate added models before they
@@ -71,4 +71,5 @@ As said: If this License does not suit you, but you still want to publish your
 model it is possible to add a different license for the models of a top-level
 subdirectory. All models in the repository fall under the license of the
 subdirectory they are contained in. 
+
 
