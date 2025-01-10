@@ -64,7 +64,7 @@ GfSE-related events.
 
 # Licenses
 
-We chose the liberal BSD 2-Clause license for the repository, to encurage open sharing of
+We chose the liberal BSD 3-Clause license for the repository, to encurage open sharing of
 models. 
 
 As said: If this License does not suit you, but you still want to publish your
