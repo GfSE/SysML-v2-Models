@@ -1,0 +1,64 @@
+[
+    {
+        "directory": ".\\example_contribution",
+        "file": "CalculationExample.sysml",
+        "parsable": true
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "DroneModelLogical.sysml",
+        "parsable": true
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "Drone_BaseArchitecture.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "EIT_System_Use_Cases.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "Fischertechnik.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "ForestFireDetectionSystemModel.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "ForestFireObservationDrone.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "HVACSystemRequirements.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "InternetModel_v1.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "lawnmowerPackage.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "Metamodel.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "MPLEExample_DirectCleanApproach_Vehicle.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "StopWatchStates.sysml"
+    },
+    {
+        "directory": ".\\example_contribution",
+        "file": "VehicleModel.sysml"
+    },
+    {
+        "directory": ".\\example_contribution\\example_nested",
+        "file": "Boeing.sysml"
+    }
+]
