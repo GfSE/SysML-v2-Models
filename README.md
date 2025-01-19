@@ -42,7 +42,7 @@ or an improvement to an existing one.
 To contribute:
 
 * fork this repository.
-* create your own directory and add your SysMLv2 model as a textual model
+* create your own directory in the models directory and add your SysMLv2 model as a textual model
   (extension `.sysml`) 
 * add a markdown-file to describe the models (as detailed as you like, we
   currently do not impose a specific form or meta-data)
