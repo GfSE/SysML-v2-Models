@@ -6,9 +6,10 @@ package Family {
 	private import ScalarValues::Natural;
 	private import ScalarValues::Boolean;
 	private import ISQ::mass;
+	private import SI::*;
 	
 	//use cases definition
-	use case def 'Agree on parenthood' {
+	use case def 'Agree on adoption' {
 		subject judge : Person[1];
 		actor woman;
 		actor man;
@@ -17,7 +18,7 @@ package Family {
 		objective {
 			doc
 			/*Ensure that the parties involved agree on the legal terms
-			 * of the parenthood certificate and assert the certificate.
+			 * of the adoption certificate and assert the certificate.
 			 * first a judge will ensure both adoptive parents abide by the law
 			 * secondly the certificate will be asserted and issued.
 			 */
@@ -27,6 +28,7 @@ package Family {
 	//attribute definitions
 	attribute def SoundWaveMaxRange;
 	attribute def SoundWaveMinRange;
+	attribute def Name;
 	
 	//Items definitions.
 	//A SoundWaveMessage is the most general type of Message used in this example. 
@@ -39,11 +41,40 @@ package Family {
 	part def Person{
 		doc 
 		/* Person is the most generic part representing people */
+		attribute name : Name;
 		attribute age : Natural;
 		attribute weight :> mass;
 		attribute isAdult : Boolean;
-		port verbalExchange : VerbalExchange;
+		port verbalExchange : VerbalExchange; 
+		//Person only respond to inquiries in awakake state.
+		state personStates {
+			entry; then asleep;
+			state asleep;
+			transition asleep_to_awake
+				first asleep
+				accept after 8[h]
+				then awake;
+			state awake {
+				do action respondToInquiry {
+					doc /*
+					 * the action is triggered by any SoundWaveMessage, processes it through a called action and sends a response.
+					 * the receival and sending of messages is done through the defined ports of an adult :> Person.
+					 * This reults in everybody responding to everything. To avoid this, the message shall include an adressee.
+					 */
+					//accept incomingMessage : SoundWaveMessage via adult.verbalExchange.verbalReceiver;
+					action triggerResponse accept incomingInquiry : SoundWaveMessage via adult.verbalExchange.verbalReceiver;
+					action processMessage : ProcessMessage { in incomingMessage = triggerResponse.incomingInquiry; out outgoingMessage;}
+					//send serializeOutputMessage.OutgoingMessage via adult.verbalExchange.verbalEmitter; 	
+					action sendResponse send processMessage.outgoingMessage via adult.verbalExchange.verbalEmitter; 
+				}
+			}
+			transition awake_to_asleep
+				first awake
+				accept after 16[h]
+				then asleep;
+		}		
 	}
+	
 	part def Administrative_Document;	
 	
 	//ports definition with nested ports
@@ -53,8 +84,8 @@ package Family {
 		out soundWave : SoundWaveMessage;
 	}
 	port def VerbalExchange {
-		port VerbalEmitter : VerbalInteraction;
-		port VerbalReceiver : ~VerbalInteraction;
+		port verbalEmitter : VerbalInteraction;
+		port verbalReceiver : ~VerbalInteraction;
 	}
 	
 	//Interface definition, being a conection between two ports
@@ -85,7 +116,7 @@ package Family {
 	// the parenthood certificate includes both parents and the certified child. 
 	// Yet the parents do not have to be the father and/or the mother of the child
 	// A parenthood certificate only exists when a child is adopted.
-	connection def Parenthood_Certificate :> Administrative_Document {
+	connection def Adoption_Certificate :> Administrative_Document {
 		end parent1 : Person[1];
 		end parent2 : Person[1];
 		end certifiedChild : Child[1];
@@ -93,24 +124,45 @@ package Family {
 			snapshot certificate_valid_from = start;
 		}
 	}
+	// action definition
+	action def ProcessMessage {
+		doc /*
+		 * parses an incoming message, processes it, serializes it and provides an outgoing response
+		 */
+		in incomingMessage;
+		out outgoingMessage;
+		//bind this.in with internal first action.in
+		bind incomingMessage = parseIncomingMessage.incomingMessage;
+		action parseIncomingMessage : ParseMessage { in incomingMessage; out parsedIncomingMessage;}
+		//pass through parameteres with flow
+		flow from parseIncomingMessage.parsedIncomingMessage to processResponse.parsedIncomingMessage;
+		then action processResponse : Think { in parsedIncomingMessage; out parsedOutgoingMessage;}
+		flow from processResponse.parsedOutgoingMessage to serializeOutputMessage.parsedOutgoingMessage;
+		then action serializeOutputMessage : SerializeMessage { in parsedOutgoingMessage; out outgoingMessage;}
+		//bind from the last internal action.out to this.out
+		bind serializeOutputMessage.outgoingMessage = outgoingMessage;
+	}
+	action def ParseMessage {in incommingMessage : SoundWaveMessage; out parsedIncommingMessage;}
+	action def Think { in parsedIncomingMessage; out parsedOutgoingMessage;}
+	action def SerializeMessage { in parsedOutgoingMessage; out OutgoingMessage;}
 	
 	//constraints definition
 	constraint minimumAgeForAdoptiveParenthood {
-		attribute partyAge : Natural;
-		partyAge >= 18
+		attribute adoptingPartyAge : Natural;
+		adoptingPartyAge >= 18
 	}
 	
 	//requirements definition
-	requirement def LegalParenthood {
+	requirement def LegalAdoptionParenthood {
 		doc
-		/* the age of a legal parent must be more than 18 years */
+		/* the age of a legal adoptive parent must be more than 18 years */
 		attribute parentAge : Natural;
 		require minimumAgeForAdoptiveParenthood {
-			parentAge = partyAge;
+			parentAge = adoptingPartyAge;
 		}
 	}
 	//Interaction for the defined use case
-	occurrence def ParenthoodCertification {
+	occurrence def AdoptionCertification {
 		part :>> socialService;
 		part :>> judge;
 		part :>> adoptiveParent_1;
@@ -161,23 +213,21 @@ package Family {
 		connect communicationPartnerA ::> woman.verbalExchange to communicationPartnerB ::> child.verbalExchange;
 	
 	//three possible variants of cerificates. Depending on the variant there will be up to five persons in the package.
-	variation part parenthod_certificate : Parenthood_Certificate{
-		variant connection parenthood_certificate_TypeA : Parenthood_Certificate 
-		connect (parent1 ::> woman[1], parent2 ::> man[1], certifiedChild ::> child[1]);
-		variant connection parenthood_certificate_TypeB1 : Parenthood_Certificate 
+	variation part adoption_certificate : Adoption_Certificate{
+		variant connection adoption_certificate_TypeB1 : Adoption_Certificate 
 		connect (parent1 ::> woman[1], adoptiveParent_1 ::> adult[1], certifiedChild ::> child[1]);
-		variant connection parenthood_certificate_TypeB2 : Parenthood_Certificate 
+		variant connection adoption_certificate_TypeB2 : Adoption_Certificate 
 		connect (parent1 ::> man[1], adoptiveParent_1 ::> adult[1], certifiedChild ::> child[1]);
-		variant connection parenthood_certificate_TypeC : Parenthood_Certificate 
+		variant connection adoption_certificate_TypeC : Adoption_Certificate 
 		connect (parent1 ::> adoptiveParent_1[1], parent2 ::> adoptiveParent_2[1], certifiedChild ::> child[1]);
 	} 
 		
 	//requirements
-	requirement validParenthood : LegalParenthood {
+	requirement validAdoptionParenthood : LegalAdoptionParenthood {
 		doc
 		/*the age of both adoptive parents in a parenthood certificate Type C shall be more than 18 years */
 		
-		subject parenthod_certificate_TypeC;
+		subject adoption_certificate_TypeC;
 		attribute :>> adoptiveParent_1.age = parentAge;
 		attribute :>> adoptiveParent_2.age = parentAge;
 	}
