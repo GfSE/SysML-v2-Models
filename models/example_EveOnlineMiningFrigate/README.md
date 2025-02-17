@@ -1,45 +1,7 @@
-# Mining Corporation Analysis and Measures of Effectiveness
-
-## 1. Cause-Effect Phenomena
-
-| Cause | Effect |
-| ----- | ------ |
-| High ore purity in asteroid belts or wormholes	| Increased revenue per unit of ore extracted. |
-| Efficient mining operations	| Higher ore yield and reduced operational costs. |
-| Rapid threat detection and mitigation	| Lower risk of frigate loss and downtime. |
-| Sufficient pilot experience	| Improved decision-making, higher ore yield, and safer operations. |
-| Adequate resupply capabilities	| Longer operational uptime and reduced downtime for resupply. |
-| Poorly maintained equipment	| Reduced mining efficiency and increased risk of system failure. |
-| High concentration of hostile ships	| Increased operational risk and potential losses. |
-| Optimized deployment of mining frigates	| Reduced idle time and more efficient mining coverage across asteroid belts or wormholes. |
-| Overlapping mining operations in one belt	| Reduced yield due to resource depletion from competing frigates. |
-| Station storage capacity	| Limits the amount of ore that can be delivered and sold. |
-
-## 2. Risk vs. Reward by Operational Area
-Location	Ore Value (ISK/unit)	ISK/hour	Risk Level	Recommendation
-High Sec	~400-500 ISK	~4M-6M ISK/hour	Low	Best for low-risk, steady income and beginners.
-Low Sec	~1,500 ISK	~8M-12M ISK/hour	Medium to High	Moderate profitability; requires scouting.
-Null Sec	~4,500-6,000 ISK	~20M-50M ISK/hour	High	High reward; requires alliance support.
-Wormholes	~4,500-6,000 ISK	~20M-80M ISK/hour	Very High	Very profitable; requires cloaking and protection.
-Summary of Recommendations
-
-### High Sec:
-
-Ideal for safe, steady operations and training new pilots.
-Focus on common ores like Veldspar and Scordite for consistent income.
-
-### Low Sec:
-
-Moderate risk, higher reward with ores like Kernite and Hemorphite.
-Use Ventures with warp stabilizers, scout ahead, and avoid gate camps.
-
-### Null Sec:
-
-High-value ores like Arkonor and Crokite.
-Requires strong alliance support, intel channels, and protection fleets.
-
-### Wormholes:
-
-Extreme profitability but very high risk.
-Use Tech 2 mining frigates (Prospect/Endurance) with cloaking for survival.
-Coordinate with corpmates and always have exit bookmarks.
+# Eve Online Mining Frigate
+This package defines a mining frigate in the context of a mining corporation in the online game Eve-Online.
+The model has been generated with an LLM following a series of questions that are aimed to identify the operational motivation of the system of interest (the mining frigate) and ultimately define their problem space. The model is mounted from the responses of the LLM in separate configuration items (files).
+The selection of this example to test the domain capabilites of an LLM is based on the availability of information in internet about the mechanics of the game and the in-game market data and trends. The SysMLv2 model was built using ChatGPT:SysMLv2 Co-Pilot.
+ 
+## Author
+Hugo Ormo is an engineer who studied at ETSEIB in Barcelona. He works as a consultant at a global IT consulting company, focusing on the transformation of enterprises toward systems engineering and MBSE. He is a certified GfSE Level A and has been training as a GfSE trainer since 2022. In this role, he has already trained several groups to GfSE Level B and C. Voluntarily, he leads the UAF working group of GfSE and is a member of the UAF working group of OMG.
