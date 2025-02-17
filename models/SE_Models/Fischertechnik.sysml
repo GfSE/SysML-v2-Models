@@ -101,46 +101,69 @@ part factoryContext {
             }
             // ProductionOrder->Production Config
             // Production config from Production Control to each machine, one port each
+
             part AngleProductionLine {
                 in port materialIn : ~MaterialPortDef;
                 out port productOut : ProductPortDef;
                 in port productionOrderIn : ~ProductOrderPortDef;
 
-                part Cutting {
-                    attribute length : float;
-                }
-
                 part Heating {
                     attribute temperature : float;
                     attribute duration : float;
+                    in port productIn : ~MaterialPortDef;
+                    out port productOut : ProductPortDef;
                 }
 
                 part Bending {
                     attribute angle;
+                    in port productIn : ~ProductPortDef;
+                    out port productOut : ProductPortDef;
+                }
+
+                part Cutting {
+                    attribute length : float;
+                    in port productIn : ~ProductPortDef;
+                    out port productOut : ProductPortDef;
                 }
 
                 part Drilling {
                     attribute holeLocationsX;
                     attribute holeLocationsY;
+                    in port productIn : ~ProductPortDef;
+                    out port productOut : ProductPortDef;
                 }
 
                 part Grinding {
                     attribute duration : float;
                     attribute grainSize : int;
+                    in port productIn : ~ProductPortDef;
+                    out port productOut : ProductPortDef;
                 }
 
                 part Polishing {
                     attribute grainSize : int;
                     attribute duration : float;
+                    in port productIn : ~ProductPortDef;
+                    out port productOut : ProductPortDef;
                 }
+
+                connect materialIn to Heating.productIn;
+                connect Heating.productOut to Bending.productIn;
+                connect Bending.productOut to Cutting.productIn;
+                connect Cutting.productOut to Drilling.productIn;
+                connect Drilling.productOut to Grinding.productIn;
+                connect Grinding.productOut to Polishing.productIn;
+                connect Polishing.productOut to productOut;
             }
 
-            connect ProductionControl.productionOrderOut to ProductionLine1.productionOrderIn;
+            connect ProductionControl.productionOrderOut to AngleProductionLine.productionOrderIn;
 
             in port productionOrderIn : ~ProductOrderPortDef;
             out port productOut : ProductPortDef;
             out port materialOrderOut : MaterialOrderPortDef;
             in port materialIn : ~MaterialPortDef;
+
+            connect AngleProductionLine.productOut to productOut;
         }
 
         part Storage {
@@ -184,7 +207,7 @@ part factoryContext {
 
         connect ProductionScheduling.productionOrderOut to Production.productionOrderIn;
         connect Production.materialOrderOut to Storage.materialOrderIn;
-        connect Production.ProductionLine1 to Dispatch.productIn;
+        connect Production.AngleProductionLine.productOut to Dispatch.productIn;
 
         connect Storage.materialOut to Production.materialIn;
     }
@@ -204,6 +227,7 @@ part factoryContext {
     }
 
     connect Customer.inquiryOut to Manufacturer.Sales.inquiryIn;
+    connect Manufacturer.Dispatch.shippingConfirmationOut to Customer.shippingConfirmationIn;
     connect Manufacturer.Sales.shippingConfirmationOut to Customer.shippingConfirmationIn;
 
     connect Manufacturer.Sales.orderQuotationOut to Customer.orderQuotationIn;
