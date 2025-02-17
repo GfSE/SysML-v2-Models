@@ -6,6 +6,8 @@ package Domain {
 	private import ParametersOfInterestMetadata::*;
 	private import OperationalUseCaseActions::*;
 	private import MiningFrigate::*;
+	private import CauseAndEffect::*;
+    private import CausationConnections::*;
 	
 
     // Root object for the domain
@@ -129,6 +131,48 @@ package Domain {
         	exhibit miningFrigatesStates {
     			in miningFrigates = miningFrigate; 
     		}
+    		// Cause and Effect Occurrences
+	        event occurrence MiningRateIncreases;
+	        event occurrence CargoCapacityIncreases;
+	        event occurrence ShieldStrengthIncreases;
+	        event occurrence ThreatDetectionImproves;
+	        event occurrence DroneOperationsImprove;
+	        event occurrence WarpSpeedIncreases;
+	        event occurrence FleetCoordinationImproves;
+	
+	        event occurrence OreYieldIncreases;
+	        event occurrence DowntimeReduces;
+	        event occurrence SurvivabilityEnhances;
+	        event occurrence ThreatResponseImproves;
+	        event occurrence OperationalEfficiencyIncreases;
+	        event occurrence OreExtractionEfficiencyIncreases;
+	        event occurrence ProfitabilityMaximizes;
+	         //The cause-effect relationships
+		    #causation connect MiningRateIncreases to OreYieldIncreases;
+		    #causation connect CargoCapacityIncreases to DowntimeReduces;
+		    #causation connect ShieldStrengthIncreases to SurvivabilityEnhances;
+		    #causation connect ThreatDetectionImproves to ThreatResponseImproves;
+		    #causation connect DroneOperationsImprove to OperationalEfficiencyIncreases;
+		    #causation connect WarpSpeedIncreases to DowntimeReduces;
+		    #causation connect FleetCoordinationImproves to OperationalEfficiencyIncreases;
+		
+		    #multicausation connection {
+		        end #cause ::> OreYieldIncreases;
+		        end #cause ::> DowntimeReduces;
+		        end #effect ::> OreExtractionEfficiencyIncreases;
+		    }
+		
+		    #multicausation connection {
+		        end #cause ::> SurvivabilityEnhances;
+		        end #cause ::> ThreatResponseImproves;
+		        end #effect ::> OperationalEfficiencyIncreases;
+		    }
+		
+		    #multicausation connection {
+		        end #cause ::> OperationalEfficiencyIncreases;
+		        end #cause ::> OreExtractionEfficiencyIncreases;
+		        end #effect ::> ProfitabilityMaximizes;
+		    }
         }
         part rorqual : Rorqual [1..*];
         ref part pilotPod : PilotPod [1..*] ;
