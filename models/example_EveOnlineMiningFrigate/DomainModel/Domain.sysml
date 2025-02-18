@@ -147,32 +147,6 @@ package Domain {
 	        event occurrence OperationalEfficiencyIncreases;
 	        event occurrence OreExtractionEfficiencyIncreases;
 	        event occurrence ProfitabilityMaximizes;
-	         //The cause-effect relationships
-		    #causation connect MiningRateIncreases to OreYieldIncreases;
-		    #causation connect CargoCapacityIncreases to DowntimeReduces;
-		    #causation connect ShieldStrengthIncreases to SurvivabilityEnhances;
-		    #causation connect ThreatDetectionImproves to ThreatResponseImproves;
-		    #causation connect DroneOperationsImprove to OperationalEfficiencyIncreases;
-		    #causation connect WarpSpeedIncreases to DowntimeReduces;
-		    #causation connect FleetCoordinationImproves to OperationalEfficiencyIncreases;
-		
-		    #multicausation connection {
-		        end #cause ::> OreYieldIncreases;
-		        end #cause ::> DowntimeReduces;
-		        end #effect ::> OreExtractionEfficiencyIncreases;
-		    }
-		
-		    #multicausation connection {
-		        end #cause ::> SurvivabilityEnhances;
-		        end #cause ::> ThreatResponseImproves;
-		        end #effect ::> OperationalEfficiencyIncreases;
-		    }
-		
-		    #multicausation connection {
-		        end #cause ::> OperationalEfficiencyIncreases;
-		        end #cause ::> OreExtractionEfficiencyIncreases;
-		        end #effect ::> ProfitabilityMaximizes;
-		    }
         }
         part rorqual : Rorqual [1..*];
         ref part pilotPod : PilotPod [1..*] ;
