@@ -11,7 +11,7 @@ package analysisProblemSpace {
     // **General Analysis Definition: Risk-Adjusted Profitability Calculation**
     analysis def RiskAdjustedProfitability {
 
-        subject miningcorporation : MiningCorporation;
+        subject miningcorporation : Domain::MiningCorporation;
 
         objective {
             doc /* Evaluates profitability across different security zones (High Sec, Low Sec, Null Sec) 
@@ -112,7 +112,7 @@ package analysisProblemSpace {
 	        in operationalCosts = 200000.0;  // ISK/hour (high cost due to logistics, security)
 	        in survivalProbability = 50.0;   // Very high risk, frequent losses
 	    }
-	    part analysisMiningCorporation : MiningCorporation ;
+	    part analysisMiningCorporation : Domain::MiningCorporation ;
 	    
 	    satisfy BUS01_1 by analysisMiningCorporation;
 	}

@@ -10,7 +10,7 @@ package OperationalUseCaseActions {
     
     action def IdentifyDestination {
         doc /* Identify an asteroid belt or a target asteroid. */
-        out targetSignature : ScanSignature;
+        out targetSignature : Domain::ScanSignature;
     }
     
     action def ActivateMiningLaser {
@@ -38,14 +38,14 @@ package OperationalUseCaseActions {
     
     action def ScanForThreats {
         doc /* Scan the surrounding space for potential threats. */
-        in scanCommand : ShipCommand;
-        out detectedThreats : ScanSignature;
-        out scanReport : ShipReport;
+        in scanCommand : Domain::ShipCommand;
+        out detectedThreats : Domain::ScanSignature;
+        out scanReport : Domain::ShipReport;
     }
 
     action def PrioritizeThreats {
         doc /* Evaluate detected threats and prioritize response actions. */
-        in detectedThreats : ScanSignature;
+        in detectedThreats : Domain::ScanSignature;
         out threatPriority : String;
     }
 
@@ -53,22 +53,22 @@ package OperationalUseCaseActions {
     
     action def UndockFromStation {
 		doc /*Undock from a station.*/
-        in undockCommand : ShipCommand;
+        in undockCommand : Domain::ShipCommand;
     }
     
     action def ExecuteWarpDrive {
         doc /* Engage the warp drive to travel to the destination. */
-        in warpCommand : ShipCommand;
-        out warpStatusReport : ShipReport;
+        in warpCommand : Domain::ShipCommand;
+        out warpStatusReport : Domain::ShipReport;
     }
 
     // Main Use Case definition : Offload Ore and Resupply
     
     action def DockToStation {
 		doc /*Dock into a station to make repairs, resupply capacitor and support systems.*/
-        in dockCommand : ShipCommand;
-		in charge : Power;
-		out dockingReport : ShipReport;
+        in dockCommand : Domain::ShipCommand;
+		in charge : Domain::Power;
+		out dockingReport : Domain::ShipReport;
     }
 
 
@@ -76,72 +76,72 @@ package OperationalUseCaseActions {
     
     action def SelectDronesForDeployment {
         doc /* Select drones for deployment based on operational needs (mining or defense). */
-        in droneCommand : ShipCommand;
-        out selectedDrones : Drone;
+        in droneCommand : Domain::ShipCommand;
+        out selectedDrones : Domain::Drone;
     }
 
     // Included Use Case definition : Navigate to Destination
     
     action def AcceptDestination {
 		doc /*Accept a destination from the pilot. */
-		in destinationCommand : ShipCommand;
-		out destinationReport : ShipReport;
+		in destinationCommand : Domain::ShipCommand;
+		out destinationReport : Domain::ShipReport;
     }
 
     action def PlotOptimalCourse {
 		doc /*Plot the optimal course using the navigation system.*/
-		out optimalCourseReport : ShipReport;
+		out optimalCourseReport : Domain::ShipReport;
     }
 
     action def EngagePropulsion {
 		doc /*Engage the propulsion system to travel along the plotted course.
 		 * Propulsion does not use items (fuel, power) in Eve Online.
 		 */
-		in engagePropulsion : ShipCommand;
-		out propulsionEngagedReport : ShipReport;    	
+		in engagePropulsion : Domain::ShipCommand;
+		out propulsionEngagedReport : Domain::ShipReport;    	
     }
 
     action def MonitorAndAdjustCourse {
 		doc /*Continuously monitor progress and adjust the course as needed.*/
-		out selectedCourseReport : ShipReport;
+		out selectedCourseReport : Domain::ShipReport;
     }
     	
 	// Included Use Case definition : Transfer Cargo	
     
     action def TransferOre {
 		doc /*Transfer ore or other cargo to the appropriate storage location.*/
-    	in unloadCommand : ShipCommand;
-		out oreCargo : CargoContainer;
-		out storageReport : ShipReport;
+    	in unloadCommand : Domain::ShipCommand;
+		out oreCargo : Domain::CargoContainer;
+		out storageReport : Domain::ShipReport;
     }
 
     action def VerifyCargoTransfer {
 		doc /*Verify the transfer has been completed successfully.*/
-    	in warehouseStatusCommand : StationCommand;
-		out warehouseReport : StationReport;    
+    	in warehouseStatusCommand : Domain::StationCommand;
+		out warehouseReport : Domain::StationReport;    
     }
 	
 	// Included Use Case definition : Engage Defense Systems
 
     action def DetectThreat {
 		doc /*Detect and classify threats using the sensor array.*/
-		in scanCommand : ShipCommand;
-		in threatSignature : ScanSignature;
-		out scanReport : ShipReport;    
+		in scanCommand : Domain::ShipCommand;
+		in threatSignature : Domain::ScanSignature;
+		out scanReport : Domain::ShipReport;    
     }
 
     action def EngageDefenses {
 		doc /*Activate defense turrets and deploy drones to neutralize threats.*/
-    	in engageCommand : ShipCommand;
-		out firePower: Power;
-		out damageReport : ShipReport;    
+    	in engageCommand : Domain::ShipCommand;
+		out firePower: Domain::Power;
+		out damageReport : Domain::ShipReport;    
     }
 	
 	// Included Use Case definition : Resupply Systems
 	
     action def VerifyResupply {
 		doc /*Verify the resupply is completed successfully.*/
-        in shipStatusCommand : ShipCommand;
-		out shipStatusReport : ShipReport;    
+        in shipStatusCommand : Domain::ShipCommand;
+		out shipStatusReport : Domain::ShipReport;    
     }
 }

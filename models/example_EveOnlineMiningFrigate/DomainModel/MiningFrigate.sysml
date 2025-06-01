@@ -7,7 +7,7 @@
 	private import OperationalUseCaseActions::*;
 	private import Domain::*;
 	 
-	part def MiningFrigate :> Spaceship {
+	part def MiningFrigate :> Domain::Spaceship {
 
         attribute miningRate : Real;          // Volume of ore mined per second (m³/s)
         attribute droneCapacity : Integer; // Number, the maximum number of drones deployable (STRQ04)
@@ -25,19 +25,19 @@
         part oreHoldExpander: OreHoldExpander [0..2]; // Optional cargo expander module
         part capacitorBooster: CapacitorBooster [0..1]; // Configurable capacitor booster
         part defenseTurret: DefenseTurret [0..*]; // Optional defense modules
-        ref part cargo : CargoContainer [0..*];
-        ref part charge : Power;
-        ref part drone : Drone [0..5];
+        ref part cargo : Domain::CargoContainer [0..*];
+        ref part charge : Domain::Power;
+        ref part drone : Domain::Drone [0..5];
         
-        port controlPort : ~PodPort;
-        port dockingPort : ~DockingPort;
-        port DefensePort : ~ThreatPort;
-        port asteroidOrePort : ~AsteroidOrePort;
-        port droneControlPort: ~DroneControllerPort;
+        port controlPort : ~Domain::PodPort;
+        port dockingPort : ~Domain::DockingPort;
+        port DefensePort : ~Domain::ThreatPort;
+        port asteroidOrePort : ~Domain::AsteroidOrePort;
+        port droneControlPort: ~Domain::DroneControllerPort;
         
         //actions declaration
 	    action activateMiningLaser : ActivateMiningLaser {
-	    }  
+	    }
            	
 	}
 	// State Definition for the Mining Frigate
@@ -65,19 +65,19 @@
  		
  		transition docked_to_inGrid
 	    	first Docked
-	    	accept pilotPodUndockCommand : ShipCommand via miningFrigates.controlPort
+	    	accept pilotPodUndockCommand : Domain::ShipCommand via miningFrigates.controlPort
 	    	do action undockFromStation : UndockFromStation {in undockCommand = pilotPodUndockCommand;}
 	    	then InGrid;  		
 	        
 	    transition inGrid_to_docked
 	    	first InGrid
-	    	accept pilotPodDockCommand : ShipCommand via miningFrigates.controlPort
+	    	accept pilotPodDockCommand : Domain::ShipCommand via miningFrigates.controlPort
 	    	do action dockToStation : DockToStation {in dockCommand = pilotPodDockCommand;}
 	    	then Docked;
 	        
 		transition inGrid_to_onWarp
 	    	first InGrid
-	    	accept warpCommand : ShipCommand via miningFrigates.controlPort
+	    	accept warpCommand : Domain::ShipCommand via miningFrigates.controlPort
 	    	do action executeWarpDrive : ExecuteWarpDrive
 	    	then OnWarp;
 	
@@ -89,79 +89,79 @@
    		//Internal transitions
    	    transition unloadCargo 
 	    	first Docked
-	    	accept unloadCommand : ShipCommand via miningFrigates.controlPort
+	    	accept unloadCommand : Domain::ShipCommand via miningFrigates.controlPort
 	    	do action transferOre : TransferOre
 	    	then Docked;
 	    
 	    transition cycleMining 
 	    	first InGrid
-	    	accept miningCommand : ShipCommand via miningFrigates.controlPort
+	    	accept miningCommand : Domain::ShipCommand via miningFrigates.controlPort
 	    	do action activateMiningLaser : ActivateMiningLaser
 	    	then InGrid;
 	    	
 		transition scanThreats
             first InGrid
-            accept scanCommand : ShipCommand via miningFrigates.controlPort
+            accept scanCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action scanForThreats : ScanForThreats
             then InGrid;
 
         transition prioritizeThreat
             first InGrid
-            accept threatSignature : ScanSignature via miningFrigates.controlPort
+            accept threatSignature : Domain::ScanSignature via miningFrigates.controlPort
             do action prioritizeThreats : PrioritizeThreats
             then InGrid;
 
         transition deployDrones
             first InGrid
-            accept droneCommand : ShipCommand via miningFrigates.controlPort
+            accept droneCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action selectDronesForDeployment : SelectDronesForDeployment
             then InGrid;
 
         transition navigation
             first InGrid
-            accept destinationCommand : ShipCommand via miningFrigates.controlPort
+            accept destinationCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action acceptDestination : AcceptDestination
             then InGrid;
 
         transition coursePlot
             first InGrid
-            accept courseCommand : ShipCommand via miningFrigates.controlPort
+            accept courseCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action plotOptimalCourse : PlotOptimalCourse
             then InGrid;
 
         transition engagePropulsion
             first InGrid
-            accept propulsionCommand : ShipCommand via miningFrigates.controlPort
+            accept propulsionCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action engagePropulsion : EngagePropulsion
             then InGrid;
 
         transition adjustCourse
             first InGrid
-            accept courseCorrection : ShipCommand via miningFrigates.controlPort
+            accept courseCorrection : Domain::ShipCommand via miningFrigates.controlPort
             do action monitorAndAdjustCourse : MonitorAndAdjustCourse
             then InGrid;
 
         transition cargoVerification
             first Docked
-            accept warehouseStatusCommand : StationCommand via miningFrigates.controlPort
+            accept warehouseStatusCommand : Domain::StationCommand via miningFrigates.controlPort
             do action verifyCargoTransfer : VerifyCargoTransfer
             then Docked;
 
         transition detectThreat
             first InGrid
-            accept threatScanCommand : ShipCommand via miningFrigates.controlPort
+            accept threatScanCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action detectThreat : DetectThreat
             then InGrid;
 
         transition engageDefense
             first InGrid
-            accept defenseCommand : ShipCommand via miningFrigates.controlPort
+            accept defenseCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action engageDefenses : EngageDefenses
             then InGrid;
 
         transition resupply
             first Docked
-            accept shipStatusCommand : ShipCommand via miningFrigates.controlPort
+            accept shipStatusCommand : Domain::ShipCommand via miningFrigates.controlPort
             do action verifyResupply : VerifyResupply
             then Docked;
 	}
