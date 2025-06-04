@@ -127,8 +127,8 @@ package Domain {
         }          // %
         
         //exhibits a predefined state
-        part miningFrigate : MiningFrigate [1..*] {
-        	exhibit miningFrigatesStates {
+        part miningFrigate : MiningFrigate::MiningFrigate [1..*] {
+        	exhibit MiningFrigate::miningFrigatesStates {
     			in miningFrigates = miningFrigate; 
     		}
     		// Cause and Effect Occurrences
@@ -299,7 +299,7 @@ package Domain {
 	interface def PowerDockIF {
         end shipDockingPort : DockingPort;
         end stationDockingPort : ~DockingPort;
-        flow of Power from stationDockingPort.power to shipDockingPort.power;
+        flow of Power from stationDockingPort.charge to shipDockingPort.charge;
         flow of CargoContainer from shipDockingPort.cargo to stationDockingPort.cargo;      
     }
 	interface def AsteroidOreIF {

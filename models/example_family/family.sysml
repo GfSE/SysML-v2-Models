@@ -215,11 +215,11 @@ package Family {
 	//three possible variants of cerificates. Depending on the variant there will be up to five persons in the package.
 	variation part adoption_certificate : Adoption_Certificate{
 		variant connection adoption_certificate_TypeB1 : Adoption_Certificate 
-		connect (parent1 ::> woman[1], adoptiveParent_1 ::> adult[1], certifiedChild ::> child[1]);
+		connect (parent1 ::> woman, adoptiveParent_1 ::> adult, certifiedChild ::> child);
 		variant connection adoption_certificate_TypeB2 : Adoption_Certificate 
-		connect (parent1 ::> man[1], adoptiveParent_1 ::> adult[1], certifiedChild ::> child[1]);
+		connect (parent1 ::> man, adoptiveParent_1 ::> adult, certifiedChild ::> child);
 		variant connection adoption_certificate_TypeC : Adoption_Certificate 
-		connect (parent1 ::> adoptiveParent_1[1], parent2 ::> adoptiveParent_2[1], certifiedChild ::> child[1]);
+		connect (parent1 ::> adoptiveParent_1, parent2 ::> adoptiveParent_2, certifiedChild ::> child);
 	} 
 		
 	//requirements

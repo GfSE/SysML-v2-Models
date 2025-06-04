@@ -15,7 +15,7 @@ package MiningFrigateRequirementsVerification {
 	// Definition of a test rig that includes all necessary verification parts
 	//Verification actions are assigned to the parts of the verification domain
     part def MiningFrigateTestRig {
-        part testMiningFrigate : MiningFrigate;
+        part testMiningFrigate : MiningFrigate::MiningFrigate;
         part testEngineer : ShipEngineer;
         part testEnvironment : TestEnvironment;
         part dataLogger : DataLogger;
@@ -38,7 +38,7 @@ package MiningFrigateRequirementsVerification {
         doc /* The ShipEngieer is both a stakeholder and an actor in the verification domain */
     }	
 	
-	part miningFrigateDUT : MiningFrigate {
+	part miningFrigateDUT : MiningFrigate::MiningFrigate {
 		doc /* The miningFrigateDUT is a test unit */
 		perform action collectData;
 		perform action deployDrones;
@@ -65,7 +65,7 @@ package MiningFrigateRequirementsVerification {
 	// Verification definitions 
     // Verification Definition for Ore Extraction Efficiency
     verification def OreExtractionEfficiencyTest {
-        subject testMiningFrigate : MiningFrigate;
+        subject testMiningFrigate : MiningFrigate::MiningFrigate;
 
         objective oreExtractionEfficiencyVerification {
             // The subject of the verify is automatically bound to "testMiningFrigate".
@@ -76,7 +76,7 @@ package MiningFrigateRequirementsVerification {
 		}
 
         action collectData {
-            in part testMiningFrigate : MiningFrigate = OreExtractionEfficiencyTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = OreExtractionEfficiencyTest::testMiningFrigate;
             out miningRateMeasuredHS : Real ; // High Sec (m³/min)
             out miningRateMeasuredLS : Real; // Low Sec, Null Sec, Wormholes
         }
@@ -95,7 +95,7 @@ package MiningFrigateRequirementsVerification {
 
     // Verification Definition for Cargo Capacity
     verification def CargoCapacityTest {
-        subject testMiningFrigate : MiningFrigate;
+        subject testMiningFrigate : MiningFrigate::MiningFrigate;
 
         objective cargoCapacityVerification {
             // The subject of the verify is automatically bound to "testMiningFrigate".
@@ -107,7 +107,7 @@ package MiningFrigateRequirementsVerification {
         }
 
         action collectData {
-            in part testMiningFrigate : MiningFrigate = CargoCapacityTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = CargoCapacityTest::testMiningFrigate;
             out cargoCapacityMeasured : Real;
         }
 
@@ -125,7 +125,7 @@ package MiningFrigateRequirementsVerification {
 
     // Verification Definition for Survivability
     verification def SurvivabilityTest {
-        subject testMiningFrigate : MiningFrigate;
+        subject testMiningFrigate : MiningFrigate::MiningFrigate;
 
         objective survivabilityVerification {
             // The subject of the verify is automatically bound to "testMiningFrigate".
@@ -137,12 +137,12 @@ package MiningFrigateRequirementsVerification {
         }
 
         action simulateHighSecAttack {
-            in part testMiningFrigate : MiningFrigate = SurvivabilityTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = SurvivabilityTest::testMiningFrigate;
             out shieldStrengthMeasuredHS : Real; // High Sec survivability (DPS)
         }
 
         action simulateLowSecAttack {
-            in part testMiningFrigate : MiningFrigate = SurvivabilityTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = SurvivabilityTest::testMiningFrigate;
             out shieldStrengthMeasuredLS : Real; // Low Sec survivability (DPS)
         }
 
@@ -160,7 +160,7 @@ package MiningFrigateRequirementsVerification {
 
     // Verification Definition for Drone Operations
     verification def DroneOperationsTest {
-        subject testMiningFrigate : MiningFrigate;
+        subject testMiningFrigate : MiningFrigate::MiningFrigate;
 
         objective droneOperationsVerification {
             // The subject of the verify is automatically bound to "testMiningFrigate".
@@ -172,7 +172,7 @@ package MiningFrigateRequirementsVerification {
         }
 
         action deployDrones {
-            in part testMiningFrigate : MiningFrigate = DroneOperationsTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = DroneOperationsTest::testMiningFrigate;
             out droneCapacityMeasured : Integer;
         }
 
@@ -191,7 +191,7 @@ package MiningFrigateRequirementsVerification {
 
     // Verification Definition for Threat Detection
     verification def ThreatDetectionTest {
-        subject testMiningFrigate : MiningFrigate;
+        subject testMiningFrigate : MiningFrigate::MiningFrigate;
 
         objective threatDetectionVerification {
             // The subject of the verify is automatically bound to "testMiningFrigate".
@@ -203,7 +203,7 @@ package MiningFrigateRequirementsVerification {
         }
 
         action collectThreatDetectionData {
-            in part testMiningFrigate : MiningFrigate = ThreatDetectionTest::testMiningFrigate;
+            in part testMiningFrigate : MiningFrigate::MiningFrigate = ThreatDetectionTest::testMiningFrigate;
             out threatDetectionRangeMeasured : Real;
         }
 
