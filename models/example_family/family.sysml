@@ -181,7 +181,7 @@ package Family {
 	//Parts
 	// Multiplicity [1] is default, but it is here displayed to emphasize the multiplicity.
 	part adult[*] : Family::Person {
-		:>> isAdult = true;
+		attribute isAdultPerson : Boolean :>> isAdult = true;
 		event occurrence informationOfLaw;
 		then event occurrence acknowledgmentOfLaw;
 		then event occurrence receivalOfCertificate;
