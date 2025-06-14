@@ -20,7 +20,9 @@ package Domain {
         part miningCorporation: MiningCorporation;
         part drone : Drone[1..*];
     }
-    
+    part domain : Domain;
+
+    // Definitions of domain objects
     part def Spaceship {
     	#mop cargoCapacity : Real;       // Maximum ore cargo capacity (m³)
         #mop survivalProbability : Real; // Probability of surviving an operation (%)
@@ -33,8 +35,6 @@ package Domain {
         attribute dockingTime : Real; // seconds, the time required to dock and offload ore (STRQ08)
         attribute shieldStrength : Real ; //Strength of the core shield (STRQ03)
     }
-
-    // Definitions of domain objects
   
     part def MiningCorporation {
          #moe minimumProfit : Real {
@@ -132,25 +132,25 @@ package Domain {
     			in miningFrigates = miningFrigate; 
     		}
     		// Cause and Effect Occurrences
-	        event occurrence MiningRateIncreases;
-	        event occurrence CargoCapacityIncreases;
-	        event occurrence ShieldStrengthIncreases;
-	        event occurrence ThreatDetectionImproves;
-	        event occurrence DroneOperationsImprove;
-	        event occurrence WarpSpeedIncreases;
-	        event occurrence FleetCoordinationImproves;
-	
-	        event occurrence OreYieldIncreases;
-	        event occurrence DowntimeReduces;
-	        event occurrence SurvivabilityEnhances;
-	        event occurrence ThreatResponseImproves;
-	        event occurrence OperationalEfficiencyIncreases;
-	        event occurrence OreExtractionEfficiencyIncreases;
-	        event occurrence ProfitabilityMaximizes;
+	        timeslice miningRateIncreases;
+	        timeslice cargoCapacityIncreases;
+	        timeslice shieldStrengthIncreases;
+	        timeslice threatDetectionImproves;
+	        timeslice droneOperationsImprove;
+	        timeslice warpSpeedIncreases;
+	        
         }
         part rorqual : Rorqual [1..*];
         ref part pilotPod : PilotPod [1..*] ;
-        part fleet : Fleet [1..*];
+        part fleet : Fleet [1..*]{
+            timeslice fleetCoordinationImproves;
+            timeslice downtimeReduces;
+	        timeslice survivabilityEnhances;
+	        timeslice threatResponseImproves;
+	        timeslice operationalEfficiencyIncreases;
+	        timeslice oreExtractionEfficiencyIncreases;
+	        timeslice profitabilityMaximizes;
+        }
         
         //interactions at the enterprise level
         occurrence def MiningAsteroid {
@@ -241,6 +241,7 @@ package Domain {
     	#mop oreContent : Real;                // Quantity of ore available (m³)
         #mop depletionRate : Real;             // Rate at which ore is extracted (m³/hour)
         port asteroidOrePort : AsteroidOrePort;
+        timeslice oreYieldIncreases;
     }
 
     part def HostileShip {
