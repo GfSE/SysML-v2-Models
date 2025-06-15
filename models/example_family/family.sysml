@@ -1,6 +1,7 @@
 package Family {
 	doc
 	/* This package defines a family */
+	//verified with SysIDE Modeler
 	
 	//Import packages
 	private import ScalarValues::Natural;
@@ -38,7 +39,7 @@ package Family {
 	item def AssertCertificate :> SoundWaveMessage;
 	
 	//parts definitions
-	part def Person{
+	part def Person {
 		doc 
 		/* Person is the most generic part representing people */
 		attribute name : Name;
@@ -148,17 +149,18 @@ package Family {
 	
 	//constraints definition
 	constraint minimumAgeForAdoptiveParenthood {
-		attribute adoptingPartyAge : Natural;
-		adoptingPartyAge >= 18
+		attribute minAdoptingPartyAge : Natural;
+		minAdoptingPartyAge == 18
 	}
 	
 	//requirements definition
 	requirement def LegalAdoptionParenthood {
 		doc
 		/* the age of a legal adoptive parent must be more than 18 years */
-		attribute parentAge : Natural;
-		require minimumAgeForAdoptiveParenthood {
-			parentAge = adoptingPartyAge;
+		attribute parent1Age : Natural;
+		attribute parent2Age : Natural;
+		require minimumAgeForAdoptiveParenthood { 
+			parent1Age >= minAdoptingPartyAge & parent2Age >= minAdoptingPartyAge 
 		}
 	}
 	//Interaction for the defined use case
@@ -178,8 +180,8 @@ package Family {
 	
 	//Parts
 	// Multiplicity [1] is default, but it is here displayed to emphasize the multiplicity.
-	part adult[*] : Person {
-		:>> isAdult = true;
+	part adult[*] : Family::Person {
+		attribute isAdultPerson : Boolean :>> isAdult = true;
 		event occurrence informationOfLaw;
 		then event occurrence acknowledgmentOfLaw;
 		then event occurrence receivalOfCertificate;
@@ -225,10 +227,10 @@ package Family {
 	//requirements
 	requirement validAdoptionParenthood : LegalAdoptionParenthood {
 		doc
-		/*the age of both adoptive parents in a parenthood certificate Type C shall be more than 18 years */
+		/*the age of an adoptive parent in a parenthood certificate Type C shall be more than 18 years */
 		
 		subject adoption_certificate_TypeC;
-		attribute :>> adoptiveParent_1.age = parentAge;
-		attribute :>> adoptiveParent_2.age = parentAge;
+		attribute :>> parent1Age = adoptiveParent_1.age;
+		attribute :>> parent2Age = adoptiveParent_2.age;
 	}
 }
