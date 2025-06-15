@@ -5,13 +5,13 @@ library package DocumentStructureLibrary {
     abstract part def Document {
         attribute title : String;
         attribute status : String;
-        part :>> chapters[*];
+        part chapters : Chapter[*];
     }
 
     // Chapters define hierarchical sections
     abstract part def Chapter {
         attribute title : String;
-        part :>> sections[*];
+        part sections : Section[*];
     }
 
     // Sections provide the narrative or model references
