@@ -6,6 +6,7 @@
 	private import ParametersOfInterestMetadata::*;
 	private import OperationalUseCaseActions::*;
 	private import Domain::*;
+    private import StakeholderConcerns::*;
 	 
 	part def MiningFrigate :> Domain::Spaceship {
 
@@ -40,6 +41,9 @@
 	    }
            	
 	}
+
+    part miningFrigate:MiningFrigate;
+
 	// State Definition for the Mining Frigate
     state miningFrigatesStates {
     	in miningFrigates : MiningFrigate;
@@ -220,5 +224,6 @@
     part def NavigationModule {
         attribute agilityBonus : Real; // Improves ship align time
         attribute warpSpeedBonus : Real; // Boost to warp speed
-    } 
+    }
+
 }	    

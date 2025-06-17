@@ -6,17 +6,50 @@
  	
  // **COTS Module Definitions with Conjugated Ports**
     
-    part def MinerI :> SimpleFrigateComponent {
+    abstract part def MinerModule :> SimpleFrigateComponent {
         doc /* Standard mining laser used on mining frigates for ore extraction. */
-        attribute miningYield : Real = 40.0;
-        attribute cycleTime : Real = 60.0;
-        attribute capacitorUsage : Real = 5.0;
-        redefines mass : Real = 500.0; // Mass in kg
-        redefines powerUsage = 5.0;
+        attribute miningYield : Real;
+        attribute cycleTime : Real;
+        attribute capacitorUsage : Real;
+        attribute range : Real;
+        redefines mass : Real; 
+        redefines powerUsage;
 
         port highSlot : ~HighSlotPort;
     }
-    
+    part def 'EP-S Gaussian Scoped Mining Laser' :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 50.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 16.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 3.0;
+    }
+    part 'Mining Laser EP-S Gaussian Scoped' : 'EP-S Gaussian Scoped Mining Laser';
+
+    part def MinerI :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 40.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 10.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 2.0;
+    }
+    part minerI : MinerI;
+
+    part def 'Particle Bore Compact Mining Laser' :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 50.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 11.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 2.0;
+    }
+    part 'Mining Laser Particle Bore Compact' : 'Particle Bore Compact Mining Laser';
+
     part def Afterburner :> SimpleFrigateComponent {
         doc /* Improves sublight speed by increasing thrust. */
         attribute velocityBonus : Real = 112.5;

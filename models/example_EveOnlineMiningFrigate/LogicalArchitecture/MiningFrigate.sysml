@@ -6,17 +6,25 @@ package MiningFrigateSolutionSpace {
     private import StdPortsAndInterfaces::*;
     private import ParametersOfInterestMetadata::*;
     private import FrigateRollupAnalysis::*;
-    private import MiningFrigateHullHighLevelActions::*;
+    private import MiningFrigateHullActions::*;
 
+    //allocate the logical mining frigate to the domain mining frigte
+    allocate logicalMiningFrigateConfiguration to MiningFrigate::miningFrigate;
+    
     // **Mining Frigate as the Core System**
-    part def MiningFrigate :> CompositeFrigateComponent {
+    abstract part def LogicalMiningFrigateConfiguration :> CompositeFrigateComponent {
         doc /* The Mining Frigate consists of a fixed hull structure with modular (COTS) components 
          * that can be replaced or upgraded depending on operational needs. */
 
-        part hull : MiningFrigateHull;
+        part logicalHull : LogicalMiningFrigateHull;
 
         // **COTS Modules (Ref Parts - Exchangeable)**
-        ref part miningLaser : MinerI[2];              
+        //the mining laser is available in three variants
+        variation ref part miningLaser : MinerModule[2]{
+            variant 'Mining Laser EP-S Gaussian Scoped';
+            variant 'Mining Laser Particle Bore Compact';
+            variant minerI : MinerI;
+        }             
         ref part propulsionModule : Afterburner[0..1]; 
         ref part shieldModule : SmallShieldExtenderI[0..1]; 
         ref part capacitorModule : SmallCapBatteryI[0..1];  
@@ -24,32 +32,47 @@ package MiningFrigateSolutionSpace {
         ref part defensiveModule : WarpCoreStabilizerI[0..2]; 
     
     	interface highSlotInterface1 : HighSlotInterface connect
-        	hullPort ::> hull.highSlot1 to
+        	hullPort ::> logicalHull.highSlot1 to
         	modulePort ::> miningLaser.highSlot;
 
 	    interface highSlotInterface2 : HighSlotInterface connect
-	        hullPort ::> hull.highSlot2 to
+	        hullPort ::> logicalHull.highSlot2 to
 	        modulePort ::> miningLaser.highSlot;
 	
 	    interface mediumSlotInterface1 : MediumSlotInterface connect
-	        hullPort ::> hull.mediumSlot1 to
+	        hullPort ::> logicalHull.mediumSlot1 to
 	        modulePort ::> propulsionModule.mediumSlot;
 	
 	    interface mediumSlotInterface2 : MediumSlotInterface connect
-	        hullPort ::> hull.mediumSlot2 to
+	        hullPort ::> logicalHull.mediumSlot2 to
 	        modulePort ::> shieldModule.mediumSlot;
 	
 	    interface lowSlotInterface1 : LowSlotInterface connect
-	        hullPort ::> hull.lowSlot1 to
+	        hullPort ::> logicalHull.lowSlot1 to
 	        modulePort ::> defensiveModule.lowSlot;
 	
 	    interface lowSlotInterface2 : LowSlotInterface connect
-	        hullPort ::> hull.lowSlot2 to
+	        hullPort ::> logicalHull.lowSlot2 to
 	        modulePort ::> defensiveModule.lowSlot;
     }
 
+    //Three different configurations of mining frigatte are defined here that base on an abstract frigate
+    abstract part logicalMiningFrigateConfiguration : LogicalMiningFrigateConfiguration;
+
+    part logicalNoviceMiningFrigatte : LogicalMiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::minerI;
+    }
+
+    part logicalTrainerMiningFrigate : LogicalMiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::'Mining Laser Particle Bore Compact';
+    } 
+
+    part logicalOperationalMiningFrigate : LogicalMiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::'Mining Laser EP-S Gaussian Scoped';
+    } 
+
     // **Mining Frigate Hull (Black Box with Ports)**
-    part def MiningFrigateHull :> SimpleFrigateComponent {
+    part def LogicalMiningFrigateHull :> SimpleFrigateComponent {
         doc /* The Venture-class Mining Frigate hull includes integrated features such as 
          * a built-in warp core stabilizer, ore hold, and base resistances. */
 
@@ -62,18 +85,17 @@ package MiningFrigateSolutionSpace {
         attribute capacitorCapacity : Real = 250.0;
         
         // Performed actions of the hull (executed by the ship's integrated systems)
-        perform action scanForThreats;
-        perform action engageDefenses;
-        perform action acceptDestination;
-        perform action plotOptimalCourse;
-        perform action engagePropulsion;
-        perform action monitorAndAdjustCourse;
-        perform action transferOre;
-        perform action verifyCargoTransfer;
-        perform action dockToStation;
-        perform action undockFromStation;
-        perform action resupplyCapacitor;
-        perform action activateMiningLaser;
+        perform action manageEnergy : MiningFrigateHullActions::ManageEnergy;
+        perform action detectThreat : MiningFrigateHullActions::DetectThreat;
+        perform action engageDefenses : MiningFrigateHullActions::EngageDefenses;
+        perform action navigateToDestination : MiningFrigateHullActions::NavigateToDestination;
+        perform action reportToPilot : MiningFrigateHullActions::ReportToPilot;
+        perform action transferOre : MiningFrigateHullActions::TransferOre;
+        perform action extractOre : MiningFrigateHullActions::ExtractOre;
+        perform action dockToStation : MiningFrigateHullActions::DockToStation;
+        perform action checkAsteroidStatus : MiningFrigateHullActions::CheckAsteroidStatus;
+        perform action resupplyCapacitor : MiningFrigateHullActions::ResupplyCapacitor;
+        perform action activateMiningLaser : MiningFrigateHullActions::ActivateMiningLaser;
 
         // **Ports for COTS Modules**
         port highSlot1 : HighSlotPort;

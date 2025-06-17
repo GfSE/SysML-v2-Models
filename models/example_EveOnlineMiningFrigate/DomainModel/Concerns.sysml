@@ -34,9 +34,10 @@ package StakeholderConcerns {
     private import StakeholdersDef::*;
     private import MiningFrigate::*;
 
+    // The concerns are directly declared without definition, beacuse they aren't going to be reused in the scope of this model.
     // Concerns Derived from the Business Case
 
-    concern def ProfitabilityConcern {
+    concern ProfitabilityConcern {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -47,7 +48,7 @@ package StakeholderConcerns {
         stakeholder miningCEO : MiningCEO;
     }
 
-    concern def OperationalCostsConcern {
+    concern OperationalCostsConcern {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -58,7 +59,7 @@ package StakeholderConcerns {
         stakeholder operationsManager : OperationsManager;
     }
 
-    concern def ScalabilityConcern  {
+    concern ScalabilityConcern  {
         subject miningCorporation : Domain::MiningCorporation;
 
         assume constraint {
@@ -69,7 +70,7 @@ package StakeholderConcerns {
         stakeholder fleetCommander : FleetCommander;
     }
 
-    concern def MarketResponsivenessConcern  {
+    concern MarketResponsivenessConcern  {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -82,7 +83,7 @@ package StakeholderConcerns {
 
     // Concerns Derived from the ConOps
 
-    concern def SecurityConcern  {
+    concern SecurityConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -94,7 +95,7 @@ package StakeholderConcerns {
         stakeholder shipEngineer : ShipEngineer;
     }
 
-    concern def ResourceAvailabilityConcern  {
+    concern ResourceAvailabilityConcern  {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -105,7 +106,7 @@ package StakeholderConcerns {
         stakeholder fleetCommander : FleetCommander;
     }
 
-    concern def DeploymentEfficiencyConcern  {
+    concern DeploymentEfficiencyConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -116,7 +117,7 @@ package StakeholderConcerns {
         stakeholder operationsManager : OperationsManager;
     }
 
-    concern def ThreatNeutralizationConcern  {
+    concern ThreatNeutralizationConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -130,7 +131,7 @@ package StakeholderConcerns {
 
     // Concerns Derived from the MoEs
 
-    concern def TotalProfitabilityConcern  {
+    concern TotalProfitabilityConcern  {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -141,7 +142,7 @@ package StakeholderConcerns {
         stakeholder miningCEO : MiningCEO;
     }
 
-    concern def OreYieldConcern  {
+    concern OreYieldConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -152,7 +153,7 @@ package StakeholderConcerns {
         stakeholder operationsManager : OperationsManager;
     }
 
-    concern def SurvivabilityConcern  {
+    concern SurvivabilityConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -163,7 +164,7 @@ package StakeholderConcerns {
         stakeholder shipEngineer : ShipEngineer;
     }
 
-    concern def FleetDeploymentEfficiencyConcern  {
+    concern FleetDeploymentEfficiencyConcern  {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -175,7 +176,7 @@ package StakeholderConcerns {
         stakeholder operationsManager : OperationsManager;
     }
 
-    concern def OreDeliveryEfficiencyConcern  {
+    concern OreDeliveryEfficiencyConcern  {
         subject miningFrigate : MiningFrigate::MiningFrigate;
 
         require constraint {
@@ -186,7 +187,7 @@ package StakeholderConcerns {
         stakeholder operationsManager : OperationsManager;
     }
 
-    concern def RiskAdjustedProfitabilityConcern {
+    concern RiskAdjustedProfitabilityConcern {
         subject miningCorporation : Domain::MiningCorporation;
 
         require constraint {
@@ -197,5 +198,15 @@ package StakeholderConcerns {
         stakeholder miningCEO : MiningCEO;
         stakeholder fleetCommander : FleetCommander;
     }
+
+    //Viewpoints
+    viewpoint 'Operational profitability'{
+        frame ProfitabilityConcern;
+
+        require constraint {
+            doc /*TBD*/
+        }
+    }
+     
 
 }
