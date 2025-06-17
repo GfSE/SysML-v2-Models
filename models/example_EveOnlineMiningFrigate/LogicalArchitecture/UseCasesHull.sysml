@@ -87,7 +87,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Withstand Incoming Damage**
     use case def WithstandIncomingDamage {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor hostileShip : Domain::HostileShip;
         actor pilotPod : Domain::PilotPod;
 
@@ -100,7 +100,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Navigate and Warp to Destinations**
     use case def NavigateAndWarp {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
 
         objective {
@@ -112,7 +112,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Store and Transfer Mined Ore**
     use case def StoreAndTransferOre {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -126,7 +126,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Dock and Undock from Stations**
     use case def DockAndUndock {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -139,7 +139,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Manage Energy Supply and Recharge**
     use case def ManageEnergy {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor smallCapBatteryI : SmallCapBatteryI;
 
@@ -152,7 +152,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case: Support High, Medium, and Low Slot Modules**
     use case def SupportModuleFitting {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor miningLaser : MinerI;
 
@@ -165,7 +165,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Detect Threat**
     use case def DetectThreat {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
 
         objective {
@@ -178,7 +178,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Engage Defenses**
     use case def EngageDefenses {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor hostileShip : Domain::HostileShip;
 
@@ -192,7 +192,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Navigate to Destination**
     use case def NavigateToDestination {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
 
         objective {
@@ -205,7 +205,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Transfer Ore**
     use case def TransferOre {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -218,7 +218,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Dock at Station**
     use case def DockAtStation {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -232,7 +232,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Resupply Capacitor**
     use case def ResupplyCapacitor {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor smallCapBatteryI : SmallCapBatteryI;
 
@@ -245,7 +245,7 @@ package MiningFrigateHullUseCasesDef {
 
     // **Use Case Definition: Activate Mining Laser**
     use case def ActivateMiningLaser {
-        subject hull : MiningFrigateHull;
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor miningLaser : MinerI;
 

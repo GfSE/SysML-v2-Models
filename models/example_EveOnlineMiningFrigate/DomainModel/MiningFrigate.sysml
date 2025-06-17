@@ -41,6 +41,9 @@
 	    }
            	
 	}
+
+    part miningFrigate:MiningFrigate;
+
 	// State Definition for the Mining Frigate
     state miningFrigatesStates {
     	in miningFrigates : MiningFrigate;
