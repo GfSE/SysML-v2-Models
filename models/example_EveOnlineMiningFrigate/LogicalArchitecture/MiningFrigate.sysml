@@ -9,14 +9,18 @@ package MiningFrigateSolutionSpace {
     private import MiningFrigateHullHighLevelActions::*;
 
     // **Mining Frigate as the Core System**
-    part def MiningFrigate :> CompositeFrigateComponent {
+    abstract part def MiningFrigateConfiguration :> CompositeFrigateComponent {
         doc /* The Mining Frigate consists of a fixed hull structure with modular (COTS) components 
          * that can be replaced or upgraded depending on operational needs. */
 
         part hull : MiningFrigateHull;
 
         // **COTS Modules (Ref Parts - Exchangeable)**
-        ref part miningLaser : MinerI[2];              
+        variation ref part miningLaser : MinerModule[2]{
+            variant 'Mining Laser EP-S Gaussian Scoped';
+            variant 'Mining Laser Particle Bore Compact';
+            variant minerI : MinerI;
+        }             
         ref part propulsionModule : Afterburner[0..1]; 
         ref part shieldModule : SmallShieldExtenderI[0..1]; 
         ref part capacitorModule : SmallCapBatteryI[0..1];  
