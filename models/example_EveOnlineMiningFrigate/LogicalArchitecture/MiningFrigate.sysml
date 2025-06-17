@@ -19,6 +19,7 @@ package MiningFrigateSolutionSpace {
         part logicalHull : LogicalMiningFrigateHull;
 
         // **COTS Modules (Ref Parts - Exchangeable)**
+        //the mining laser is available in three variants
         variation ref part miningLaser : MinerModule[2]{
             variant 'Mining Laser EP-S Gaussian Scoped';
             variant 'Mining Laser Particle Bore Compact';
@@ -55,7 +56,7 @@ package MiningFrigateSolutionSpace {
 	        modulePort ::> defensiveModule.lowSlot;
     }
 
-    //Three different configurations of mining frigatte are defined here
+    //Three different configurations of mining frigatte are defined here that base on an abstract frigate
     abstract part logicalMiningFrigateConfiguration : LogicalMiningFrigateConfiguration;
 
     part logicalNoviceMiningFrigatte : LogicalMiningFrigateConfiguration{
