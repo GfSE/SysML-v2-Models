@@ -374,5 +374,16 @@ package Domain {
     item def ScanSignature {
         attribute type: String;
         attribute priority: String;
-    }   
+    }
+    
+    //Views and views definition
+    view def 'Domain Structure View'{
+        satisfy StakeholderConcerns::'Operational profitability';
+
+        filter @SysML::PartUsage;
+    }
+    view 'Mining Frigate structure Table View' : 'Domain Structure View' {
+        expose MiningCorporation::miningFrigate::*;
+        //render asElementTable;
+    }    
 }
