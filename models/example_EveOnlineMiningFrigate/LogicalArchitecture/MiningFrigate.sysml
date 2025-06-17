@@ -6,7 +6,7 @@ package MiningFrigateSolutionSpace {
     private import StdPortsAndInterfaces::*;
     private import ParametersOfInterestMetadata::*;
     private import FrigateRollupAnalysis::*;
-    private import MiningFrigateHullHighLevelActions::*;
+    private import MiningFrigateHullActions::*;
 
     //allocate the logical mining frigate to the domain mining frigte
     allocate logicalMiningFrigateConfiguration to MiningFrigate::miningFrigate;
@@ -84,18 +84,17 @@ package MiningFrigateSolutionSpace {
         attribute capacitorCapacity : Real = 250.0;
         
         // Performed actions of the hull (executed by the ship's integrated systems)
-        perform action scanForThreats;
-        perform action engageDefenses;
-        perform action acceptDestination;
-        perform action plotOptimalCourse;
-        perform action engagePropulsion;
-        perform action monitorAndAdjustCourse;
-        perform action transferOre;
-        perform action verifyCargoTransfer;
-        perform action dockToStation;
-        perform action undockFromStation;
-        perform action resupplyCapacitor;
-        perform action activateMiningLaser;
+        perform action manageEnergy : MiningFrigateHullActions::ManageEnergy;
+        perform action detectThreat : MiningFrigateHullActions::DetectThreat;
+        perform action engageDefenses : MiningFrigateHullActions::EngageDefenses;
+        perform action navigateToDestination : MiningFrigateHullActions::NavigateToDestination;
+        perform action reportToPilot : MiningFrigateHullActions::ReportToPilot;
+        perform action transferOre : MiningFrigateHullActions::TransferOre;
+        perform action extractOre : MiningFrigateHullActions::ExtractOre;
+        perform action dockToStation : MiningFrigateHullActions::DockToStation;
+        perform action checkAsteroidStatus : MiningFrigateHullActions::CheckAsteroidStatus;
+        perform action resupplyCapacitor : MiningFrigateHullActions::ResupplyCapacitor;
+        perform action activateMiningLaser : MiningFrigateHullActions::ActivateMiningLaser;
 
         // **Ports for COTS Modules**
         port highSlot1 : HighSlotPort;
