@@ -52,6 +52,19 @@ package MiningFrigateSolutionSpace {
 	        modulePort ::> defensiveModule.lowSlot;
     }
 
+    //Three different configurations of mining frigatte are defined here
+    part noviceMiningFrigatte : MiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::minerI;
+    }
+
+    part trainerMiningFrigate : MiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::'Mining Laser Particle Bore Compact';
+    } 
+
+    part operationalMiningFrigate : MiningFrigateConfiguration{
+        part redefines miningLaser = miningLaser::'Mining Laser EP-S Gaussian Scoped';
+    } 
+
     // **Mining Frigate Hull (Black Box with Ports)**
     part def MiningFrigateHull :> SimpleFrigateComponent {
         doc /* The Venture-class Mining Frigate hull includes integrated features such as 
