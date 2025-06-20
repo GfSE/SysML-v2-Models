@@ -126,11 +126,8 @@ package Domain {
              */
         }          // %
         
-        //exhibits a predefined state
-        part miningFrigate : MiningFrigate::MiningFrigate [1..*] {
-        	exhibit MiningFrigate::miningFrigatesStates {
-    			in miningFrigates = miningFrigate; 
-    		}
+        part miningFrigate : MiningFrigate::MiningFrigate [1..*]{
+
     		// Cause and Effect Occurrences
 	        timeslice miningRateIncreases;
 	        timeslice cargoCapacityIncreases;

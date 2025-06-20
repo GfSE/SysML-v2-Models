@@ -25,150 +25,147 @@
         part sensorModule: SensorModule;       // Configurable sensor array
         part oreHoldExpander: OreHoldExpander [0..2]; // Optional cargo expander module
         part capacitorBooster: CapacitorBooster [0..1]; // Configurable capacitor booster
-        part defenseTurret: DefenseTurret [0..*]; // Optional defense modules
+        part warpCoreStabilizer: WarpCoreStabilizer [0..*]; // Optional defense modules
         ref part cargo : Domain::CargoContainer [0..*];
         ref part charge : Domain::Power;
         ref part drone : Domain::Drone [0..5];
         
         port controlPort : ~Domain::PodPort;
         port dockingPort : ~Domain::DockingPort;
-        port DefensePort : ~Domain::ThreatPort;
+        port defensePort : ~Domain::ThreatPort;
         port asteroidOrePort : ~Domain::AsteroidOrePort;
-        port droneControlPort: ~Domain::DroneControllerPort;
-        
-        //actions declaration
-	    action activateMiningLaser : ActivateMiningLaser {
-	    }
-           	
+        port droneControlPort: ~Domain::DroneControllerPort;          	
 	}
+    part miningFrigate : MiningFrigate{
+        // State Definition for the Mining Frigate
+        state miningFrigatesStates {
+            
+            entry;
+            then Docked; //boarding a ship is not modeled.
 
-    part miningFrigate:MiningFrigate;
-
-	// State Definition for the Mining Frigate
-    state miningFrigatesStates {
-    	in miningFrigates : MiningFrigate;
+            state Packaged {
+                doc /* The mining frigate is packaged inside a station and can be cargoed. */
+            }	 	
+            state Parked {
+                doc /* The mining frigate is parked inside a station, but not boarded by a pod. */
+            }	 	
+            state Docked {
+                doc /* The mining frigate is inside a station, available for refitting, resupply, or cargo transfer. */
+            }
+            state InGrid {
+                doc /* The mining frigate is in open space, near asteroids, stations, or other celestial objects. */
+            }
+            state OnWarp {
+                doc /* The mining frigate is in warp, traveling between locations. */
+            }
+            
+            transition docked_to_inGrid
+                first Docked
+                accept pilotPodUndockCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action undockFromStation : UndockFromStation {in undockCommand = pilotPodUndockCommandSig;}
+                then InGrid;  		
+                
+            transition inGrid_to_docked
+                first InGrid
+                accept pilotPodDockCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action dockToStation : DockToStation {in dockCommand = pilotPodDockCommandSig;}
+                then Docked;
+                
+            transition inGrid_to_onWarp
+                first InGrid
+                accept warpCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action executeWarpDrive: ExecuteWarpDrive {in warpCommand = warpCommandSig;}
+                then OnWarp;
         
-    	entry;
-    	then Docked; //boarding a ship is not modeled.
+            transition onWarp_to_inGrid
+                first OnWarp
+                accept when miningFrigate.warpBubbleEnd
+                then InGrid;     	
+            
+            //Internal transitions
+            transition unloadCargo 
+                first Docked
+                accept unloadCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action transferOre : TransferOre {in unloadCommand = unloadCommandSig;}
+                then Docked;
+            
+            transition cycleMining 
+                first InGrid
+                accept miningCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action activateMiningLaser : ActivateMiningLaser
+                then InGrid;
+                
+            transition scanThreats
+                first InGrid
+                accept scanCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action scanForThreats : ScanForThreats {in scanCommand = scanCommandSig;}
+                then InGrid;
 
-	 	state Packaged {
-	 		doc /* The mining frigate is packaged inside a station and can be cargoed. */
-	 	}	 	
-	 	state Parked {
-	 		doc /* The mining frigate is parked inside a station, but not boarded by a pod. */
-	 	}	 	
-	 	state Docked {
-	    	doc /* The mining frigate is inside a station, available for refitting, resupply, or cargo transfer. */
-	    }
-	    state InGrid {
-	        doc /* The mining frigate is in open space, near asteroids, stations, or other celestial objects. */
-	    }
-	 	state OnWarp {
-	        doc /* The mining frigate is in warp, traveling between locations. */
-	    }
- 		
- 		transition docked_to_inGrid
-	    	first Docked
-	    	accept pilotPodUndockCommand : Domain::ShipCommand via miningFrigates.controlPort
-	    	do action undockFromStation : UndockFromStation {in undockCommand = pilotPodUndockCommand;}
-	    	then InGrid;  		
-	        
-	    transition inGrid_to_docked
-	    	first InGrid
-	    	accept pilotPodDockCommand : Domain::ShipCommand via miningFrigates.controlPort
-	    	do action dockToStation : DockToStation {in dockCommand = pilotPodDockCommand;}
-	    	then Docked;
-	        
-		transition inGrid_to_onWarp
-	    	first InGrid
-	    	accept warpCommand : Domain::ShipCommand via miningFrigates.controlPort
-	    	do action executeWarpDrive : ExecuteWarpDrive
-	    	then OnWarp;
+            transition prioritizeThreat
+                first InGrid
+                accept threatSignatureSig : Domain::ScanSignature via miningFrigate.controlPort
+                do action prioritizeThreats : PrioritizeThreats {in detectedThreats = threatSignatureSig;}
+                then InGrid;
+
+            transition deployDrones
+                first InGrid
+                accept droneCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action selectDronesForDeployment : SelectDronesForDeployment {in droneCommand = droneCommandSig;}
+                then InGrid;
+
+            transition navigation
+                first InGrid
+                accept destinationCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action acceptDestination : AcceptDestination {in destinationCommand = destinationCommandSig;}
+                then InGrid;
+
+            transition coursePlot
+                first InGrid
+                accept courseCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action plotOptimalCourse : PlotOptimalCourse
+                then InGrid;
+
+            transition engagingPropulsion
+                first InGrid
+                accept propulsionCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action engagePropulsion : EngagePropulsion { in engagePropulsion = propulsionCommandSig;}
+                then InGrid;
+
+            transition adjustingCourse
+                first InGrid
+                accept courseCorrectionSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action monitorAndAdjustCourse : MonitorAndAdjustCourse
+                then InGrid;
+
+            transition cargoVerification
+                first Docked
+                accept warehouseStatusCommandSig : Domain::StationCommand via miningFrigate.controlPort
+                do action verifyCargoTransfer : VerifyCargoTransfer {in warehouseStatusCommand = warehouseStatusCommandSig;}
+                then Docked;
+
+            transition detectingThreat
+                first InGrid
+                accept threatScanCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action detectThreat : DetectThreat {in scanCommand = threatScanCommandSig;}
+                then InGrid;
+
+            transition engagingDefenses
+                first InGrid
+                accept defenseCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action engageDefenses : EngageDefenses {in engageCommand = defenseCommandSig;}
+                then InGrid;
+
+            transition resupplying
+                first Docked
+                accept shipStatusCommandSig : Domain::ShipCommand via miningFrigate.controlPort
+                do action verifyResupply : VerifyResupply
+                then Docked;
+        }
+
+    }
+
+
 	
-	    transition onWarp_to_inGrid
-	    	first OnWarp
-	    	accept when miningFrigates.warpBubbleEnd
-	    	then InGrid;     	
-   		
-   		//Internal transitions
-   	    transition unloadCargo 
-	    	first Docked
-	    	accept unloadCommand : Domain::ShipCommand via miningFrigates.controlPort
-	    	do action transferOre : TransferOre
-	    	then Docked;
-	    
-	    transition cycleMining 
-	    	first InGrid
-	    	accept miningCommand : Domain::ShipCommand via miningFrigates.controlPort
-	    	do action activateMiningLaser : ActivateMiningLaser
-	    	then InGrid;
-	    	
-		transition scanThreats
-            first InGrid
-            accept scanCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action scanForThreats : ScanForThreats
-            then InGrid;
-
-        transition prioritizeThreat
-            first InGrid
-            accept threatSignature : Domain::ScanSignature via miningFrigates.controlPort
-            do action prioritizeThreats : PrioritizeThreats
-            then InGrid;
-
-        transition deployDrones
-            first InGrid
-            accept droneCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action selectDronesForDeployment : SelectDronesForDeployment
-            then InGrid;
-
-        transition navigation
-            first InGrid
-            accept destinationCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action acceptDestination : AcceptDestination
-            then InGrid;
-
-        transition coursePlot
-            first InGrid
-            accept courseCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action plotOptimalCourse : PlotOptimalCourse
-            then InGrid;
-
-        transition engagePropulsion
-            first InGrid
-            accept propulsionCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action engagePropulsion : EngagePropulsion
-            then InGrid;
-
-        transition adjustCourse
-            first InGrid
-            accept courseCorrection : Domain::ShipCommand via miningFrigates.controlPort
-            do action monitorAndAdjustCourse : MonitorAndAdjustCourse
-            then InGrid;
-
-        transition cargoVerification
-            first Docked
-            accept warehouseStatusCommand : Domain::StationCommand via miningFrigates.controlPort
-            do action verifyCargoTransfer : VerifyCargoTransfer
-            then Docked;
-
-        transition detectThreat
-            first InGrid
-            accept threatScanCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action detectThreat : DetectThreat
-            then InGrid;
-
-        transition engageDefense
-            first InGrid
-            accept defenseCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action engageDefenses : EngageDefenses
-            then InGrid;
-
-        transition resupply
-            first Docked
-            accept shipStatusCommand : Domain::ShipCommand via miningFrigates.controlPort
-            do action verifyResupply : VerifyResupply
-            then Docked;
-	}
     
      // Definitions for individual parts of the mining frigate
     part def SpaceshipModule {
@@ -217,13 +214,12 @@
         attribute optimalRange : Real; // Optimal engagement range
     }
 
-    part def DroneBay {
-        attribute maxDrones : Integer; // Maximum drones stored
-    }
-
     part def NavigationModule {
         attribute agilityBonus : Real; // Improves ship align time
         attribute warpSpeedBonus : Real; // Boost to warp speed
     }
 
-}	    
+    part def WarpCoreStabilizer {
+        attribute warpCoreStrenght : Real; // Improves ship align time
+    }
+ }

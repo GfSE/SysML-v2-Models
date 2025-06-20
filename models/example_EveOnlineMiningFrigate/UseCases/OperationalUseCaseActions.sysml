@@ -2,7 +2,6 @@ package OperationalUseCaseActions {
 	
 	private import Domain::*;
 	private import ScalarValues::*;
-	private import MiningFrigate::*; 
 	
 	// Operational Action Definitions for the Mining Frigate
 

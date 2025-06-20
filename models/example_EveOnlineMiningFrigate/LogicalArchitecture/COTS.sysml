@@ -101,4 +101,11 @@
 
         port lowSlot : ~LowSlotPort;
     }
+
+    part def DroneLinkAugmentor :> SimpleFrigateComponent {
+        doc /* These modules extend your drone control range. Drone Link Augmentors 
+        * can be useful for drone ships and ships with nothing else to fit in their spare highslots. */
+
+        port highSlot : ~HighSlotPort;
+    }
 }
