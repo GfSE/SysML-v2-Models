@@ -61,7 +61,7 @@ package MiningFrigateSolutionSpace {
   
     }
 
-    //Three different configurations of mining frigatte are defined here that base on an abstract frigate
+    //An abstract frigate is defined here, that will be used as a basis to define possible frigate configurations.
     abstract part logicalMiningFrigateConfiguration : LogicalMiningFrigateConfiguration {
 
         //the state of the LogicalMiningFrigateConfiguration is redefined from the problem space
@@ -190,7 +190,8 @@ package MiningFrigateSolutionSpace {
         }       
         
     }
-
+    
+    //Three different configurations of mining frigatte are defined here that base on an abstract frigate
     part logicalNoviceMiningFrigatte :> logicalMiningFrigateConfiguration{
         part redefines miningLaser = miningLaser::minerI;
     }
@@ -224,7 +225,6 @@ package MiningFrigateSolutionSpace {
         perform action navigateToDestination : MiningFrigateHullActions::NavigateToDestination;
         perform action reportToPilot : MiningFrigateHullActions::ReportToPilot;
         perform action transferOre : MiningFrigateHullActions::TransferOre;
-        perform action extractOre : MiningFrigateHullActions::ExtractOre;
         perform action dockToStation : MiningFrigateHullActions::DockToStation;
         perform action checkAsteroidStatus : MiningFrigateHullActions::CheckAsteroidStatus;
         perform action resupplyCapacitor : MiningFrigateHullActions::ResupplyCapacitor;

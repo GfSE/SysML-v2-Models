@@ -2,6 +2,7 @@ package MiningFrigateHullActions {
 
     private import Domain::*;
     private import MiningFrigateSolutionSpace::*;
+    private import COTS::*;
     
     // **Action: Manage Energy Supply and Recharge**
     action def ManageEnergy { 
@@ -63,9 +64,9 @@ package MiningFrigateHullActions {
 
         decide;
         	if checkAsteroidStatus.asteroidStatus == "depleted" then reportDepletion;
-        	else continueMining;
+        	else mineOre;
             
-        action continueMining : ExtractOre {
+        perform action mineOre references COTS::MinerModule::extractOre {
             in miningCommand;
             out miningStatus;
             }
@@ -74,19 +75,13 @@ package MiningFrigateHullActions {
             in asteroidStatus;
             out report : Domain::ShipReport;}
 
-        bind continueMining.miningStatus = miningStatus;
+        bind mineOre.miningStatus = miningStatus;
     }
 
     // **Action: Check Asteroid Status**
     action def CheckAsteroidStatus { 
         in miningCommand : Domain::ShipCommand; 
         out asteroidStatus : Domain::ShipReport; 
-    }
-
-    // **Action: Extract Ore (Standard Mining)**
-    action def ExtractOre { 
-        in miningCommand : Domain::ShipCommand; 
-        out miningStatus : Domain::ShipReport; 
     }
 
     // **Action: Report Asteroid Depletion to Pilot**

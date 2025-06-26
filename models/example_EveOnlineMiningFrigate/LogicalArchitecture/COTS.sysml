@@ -16,7 +16,14 @@
         redefines powerUsage;
 
         port highSlot : ~HighSlotPort;
+        
+        // **Action: Extract Ore
+        perform action extractOre { 
+            in miningCommand : Domain::ShipCommand; 
+            out miningStatus : Domain::ShipReport; 
+        }
     }
+
     part def 'EP-S Gaussian Scoped Mining Laser' :> MinerModule {
         doc /* Standard mining laser used on mining frigates for ore extraction. */
         redefines miningYield : Real = 50.0;

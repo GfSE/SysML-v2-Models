@@ -5,7 +5,7 @@ package MiningFrigateActions_logical {
 	private import ScalarValues::*;
     private import OperationalUseCaseActions::*; 
 
-    //the actions of the LogicalMiningFrigateConfiguration are inherited form the problem space and redefined for the solution space
+    //action parameters are inherited
     action def UndockFromStation_logical :> OperationalUseCaseActions::UndockFromStation;
     action def DockToStation_logical :> OperationalUseCaseActions::DockToStation;
     action def ExecuteWarpDrive_logical :> OperationalUseCaseActions::ExecuteWarpDrive;

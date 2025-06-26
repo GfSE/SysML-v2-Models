@@ -285,7 +285,7 @@ package Domain {
 		out item droneReport : DroneReport;
 	}	
 	
-	// Interface definition
+	// Interfaces definition
     interface def CommandIF {
         end controlSend : PodPort;
         end controlReceive : ~PodPort;
