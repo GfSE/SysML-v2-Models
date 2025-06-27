@@ -3,6 +3,7 @@ package MiningFrigateHullUseCases {
     private import MiningFrigateSolutionSpace::*;
     private import Domain::*;
     private import COTS::*;
+    private import MiningFrigateHull::*;
 
     // **Use Case: Manage Energy Supply and Recharge**
     use case ManageEnergy {

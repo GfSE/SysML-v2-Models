@@ -4,8 +4,16 @@
  	private import StdPortsAndInterfaces::*;
  	private import FrigateRollupAnalysis::*;
  	
- // **COTS Module Definitions with Conjugated Ports**
-    
+    //COTS items
+    item def ModuleCommand {
+        attribute type: String;
+    }
+    item def ModuleReport {
+        attribute type: String;
+    }
+
+ 
+    // COTS Module Definitions with Conjugated Ports**   
     abstract part def MinerModule :> SimpleFrigateComponent {
         doc /* Standard mining laser used on mining frigates for ore extraction. */
         attribute miningYield : Real;
@@ -19,8 +27,9 @@
         
         // **Action: Extract Ore
         perform action extractOre { 
-            in miningCommand : Domain::ShipCommand; 
-            out miningStatus : Domain::ShipReport; 
+            in miningLaserPowerSupply : Real;
+            in miningLaserTarget : ModuleCommand;
+            out miningLaserStatus : ModuleReport; 
         }
     }
 
