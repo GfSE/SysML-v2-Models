@@ -1,145 +1,13 @@
-package MiningFrigateHullUseCasesUsage {
-
-    private import MiningFrigateHullUseCasesDef::*;
-    private import Domain::*;
-
-    // **Use Case Usage: Withstand Incoming Damage**
-    use case withstandIncomingDamage : WithstandIncomingDamage {
-        first start;
-
-        then include use case detectThreat : DetectThreat {
-            actor :>> pilotPod = withstandIncomingDamage::pilotPod;
-        }
-
-        then include use case engageDefenses : EngageDefenses {
-            actor :>> pilotPod = withstandIncomingDamage::pilotPod;
-            actor :>> hostileShip = withstandIncomingDamage::hostileShip;
-        }
-
-        then done;
-    }
-
-    // **Use Case Usage: Navigate and Warp to Destinations**
-    use case navigateAndWarp : NavigateAndWarp {
-        first start;
-
-        then include use case navigateToDestination : NavigateToDestination {
-            actor :>> pilotPod = navigateAndWarp::pilotPod;
-        }
-
-        then done;
-    }
-
-    // **Use Case Usage: Store and Transfer Mined Ore**
-    use case storeAndTransferOre : StoreAndTransferOre {
-        first start;
-
-        then include use case transferOre : TransferOre {
-            actor :>> pilotPod = storeAndTransferOre::pilotPod;
-            actor :>> station = storeAndTransferOre::station;
-        }
-
-        then done;
-    }
-
-    // **Use Case Usage: Dock and Undock from Stations**
-    use case dockAndUndock : DockAndUndock {
-        first start;
-
-        then include use case dockAtStation : DockAtStation {
-            actor :>> pilotPod = dockAndUndock::pilotPod;
-            actor :>> station = dockAndUndock::station;
-        }
-
-        then done;
-    }
-
-    // **Use Case Usage: Manage Energy Supply and Recharge**
-    use case manageEnergy : ManageEnergy {
-        first start;
-
-        then include use case resupplyCapacitor : ResupplyCapacitor {
-            actor :>> pilotPod = manageEnergy::pilotPod;
-            actor :>> smallCapBatteryI = manageEnergy::smallCapBatteryI;
-        }
-
-        then done;
-    }
-
-    // **Use Case Usage: Support High, Medium, and Low Slot Modules**
-    use case supportModuleFitting : SupportModuleFitting {
-        first start;
-
-        then include use case activateMiningLaser : ActivateMiningLaser {
-            actor :>> miningLaser = supportModuleFitting::miningLaser;
-        }
-
-        then done;
-    }
-}
-
-
-package MiningFrigateHullUseCasesDef {
+package MiningFrigateHullUseCases {
 
     private import MiningFrigateSolutionSpace::*;
     private import Domain::*;
     private import COTS::*;
-
-    // **Use Case: Withstand Incoming Damage**
-    use case def WithstandIncomingDamage {
-        subject hull : MiningFrigateHull;
-        actor hostileShip : Domain::HostileShip;
-        actor pilotPod : Domain::PilotPod;
-
-        objective {
-            doc /*
-            * The Mining Frigate Hull shall sustain damage from hostile ships while ensuring pilot safety.
-            */
-        }
-    }
-
-    // **Use Case: Navigate and Warp to Destinations**
-    use case def NavigateAndWarp {
-        subject hull : MiningFrigateHull;
-        actor pilotPod : Domain::PilotPod;
-
-        objective {
-            doc /*
-            * The Mining Frigate Hull shall navigate between celestial bodies using its onboard navigation system.
-            */
-        }
-    }
-
-    // **Use Case: Store and Transfer Mined Ore**
-    use case def StoreAndTransferOre {
-        subject hull : MiningFrigateHull;
-        actor pilotPod : Domain::PilotPod;
-        actor station : Domain::Station;
-
-        objective {
-            doc /*
-            * The Mining Frigate Hull shall store extracted ore in its ore hold 
-            * and transfer it to a station or fleet hauler when required.
-            */
-        }
-    }
-
-    // **Use Case: Dock and Undock from Stations**
-    use case def DockAndUndock {
-        subject hull : MiningFrigateHull;
-        actor pilotPod : Domain::PilotPod;
-        actor station : Domain::Station;
-
-        objective {
-            doc /*
-            * The Mining Frigate Hull shall support docking and undocking operations at stations or other docking structures.
-            */
-        }
-    }
+    private import MiningFrigateHull::*;
 
     // **Use Case: Manage Energy Supply and Recharge**
-    use case def ManageEnergy {
-        subject hull : MiningFrigateHull;
+    use case ManageEnergy {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor smallCapBatteryI : SmallCapBatteryI;
 
@@ -150,22 +18,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case: Support High, Medium, and Low Slot Modules**
-    use case def SupportModuleFitting {
-        subject hull : MiningFrigateHull;
-        actor pilotPod : Domain::PilotPod;
-        actor miningLaser : MinerI;
-
-        objective {
-            doc /*
-            * The Mining Frigate Hull shall host configurable module slots for different mission profiles.
-            */
-        }
-    }
-
-    // **Use Case Definition: Detect Threat**
-    use case def DetectThreat {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Detect Threat**
+    use case DetectThreat {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
 
         objective {
@@ -176,9 +31,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Engage Defenses**
-    use case def EngageDefenses {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Engage Defenses**
+    use case EngageDefenses {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor hostileShip : Domain::HostileShip;
 
@@ -190,9 +45,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Navigate to Destination**
-    use case def NavigateToDestination {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Navigate to Destination**
+    use case NavigateToDestination {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
 
         objective {
@@ -203,9 +58,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Transfer Ore**
-    use case def TransferOre {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Transfer Ore**
+    use case TransferOre {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -216,9 +71,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Dock at Station**
-    use case def DockAtStation {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Dock to Station**
+    use case DockToStation {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor station : Domain::Station;
 
@@ -230,9 +85,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Resupply Capacitor**
-    use case def ResupplyCapacitor {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Resupply Capacitor**
+    use case ResupplyCapacitor {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor smallCapBatteryI : SmallCapBatteryI;
 
@@ -243,9 +98,9 @@ package MiningFrigateHullUseCasesDef {
         }
     }
 
-    // **Use Case Definition: Activate Mining Laser**
-    use case def ActivateMiningLaser {
-        subject hull : MiningFrigateHull;
+    // **Use Case: Activate Mining Laser**
+    use case ActivateMiningLaser {
+        subject hull : LogicalMiningFrigateHull;
         actor pilotPod : Domain::PilotPod;
         actor miningLaser : MinerI;
 
