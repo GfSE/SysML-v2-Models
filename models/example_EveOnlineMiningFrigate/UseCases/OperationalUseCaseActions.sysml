@@ -2,7 +2,6 @@ package OperationalUseCaseActions {
 	
 	private import Domain::*;
 	private import ScalarValues::*;
-	private import MiningFrigate::*; 
 	
 	// Operational Action Definitions for the Mining Frigate
 
@@ -32,6 +31,8 @@ package OperationalUseCaseActions {
          * - If capacitor energy is insufficient, fail to activate laser and notify the pilot.
          * - If ECM interference disrupts target lock, pause extraction until lock is re-established.
          */
+         in activateMiningLaser : Domain::ShipCommand;
+         out miningCycleReport : Domain::ShipReport;
     }  
 
     // Main Use Case definition : Detect Threats and Engage Defenses

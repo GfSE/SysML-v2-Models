@@ -4,19 +4,68 @@
  	private import StdPortsAndInterfaces::*;
  	private import FrigateRollupAnalysis::*;
  	
- // **COTS Module Definitions with Conjugated Ports**
-    
-    part def MinerI :> SimpleFrigateComponent {
+    //COTS items
+    item def ModuleCommand {
+        attribute type: String;
+    }
+    item def ModuleReport {
+        attribute type: String;
+    }
+
+ 
+    // COTS Module Definitions with Conjugated Ports**   
+    abstract part def MinerModule :> SimpleFrigateComponent {
         doc /* Standard mining laser used on mining frigates for ore extraction. */
-        attribute miningYield : Real = 40.0;
-        attribute cycleTime : Real = 60.0;
-        attribute capacitorUsage : Real = 5.0;
-        redefines mass : Real = 500.0; // Mass in kg
-        redefines powerUsage = 5.0;
+        attribute miningYield : Real;
+        attribute cycleTime : Real;
+        attribute capacitorUsage : Real;
+        attribute range : Real;
+        redefines mass : Real; 
+        redefines powerUsage;
 
         port highSlot : ~HighSlotPort;
+        
+        // **Action: Extract Ore
+        perform action extractOre { 
+            in miningLaserPowerSupply : Real;
+            in miningLaserTarget : ModuleCommand;
+            out miningLaserStatus : ModuleReport; 
+        }
     }
-    
+
+    part def 'EP-S Gaussian Scoped Mining Laser' :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 50.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 16.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 3.0;
+    }
+    part 'Mining Laser EP-S Gaussian Scoped' : 'EP-S Gaussian Scoped Mining Laser';
+
+    part def MinerI :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 40.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 10.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 2.0;
+    }
+    part minerI : MinerI;
+
+    part def 'Particle Bore Compact Mining Laser' :> MinerModule {
+        doc /* Standard mining laser used on mining frigates for ore extraction. */
+        redefines miningYield : Real = 50.0;
+        redefines cycleTime : Real = 60.0;
+        redefines capacitorUsage : Real = 5.0;
+        redefines range : Real = 11.0;
+        redefines mass : Real = 500.0; // Mass in kg
+        redefines powerUsage = 2.0;
+    }
+    part 'Mining Laser Particle Bore Compact' : 'Particle Bore Compact Mining Laser';
+
     part def Afterburner :> SimpleFrigateComponent {
         doc /* Improves sublight speed by increasing thrust. */
         attribute velocityBonus : Real = 112.5;
@@ -67,5 +116,12 @@
         redefines powerUsage = 0.0;
 
         port lowSlot : ~LowSlotPort;
+    }
+
+    part def DroneLinkAugmentor :> SimpleFrigateComponent {
+        doc /* These modules extend your drone control range. Drone Link Augmentors 
+        * can be useful for drone ships and ships with nothing else to fit in their spare highslots. */
+
+        port highSlot : ~HighSlotPort;
     }
 }
